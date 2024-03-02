@@ -15,10 +15,7 @@ export const useStore = create(
       setSelectedChatroom: (newSelectedChatroom) => set(() => ({ selectedChatroom: newSelectedChatroom })),
     }),
     {
-      // name of the item in the storage (must be unique)
-      name: "chat2chat", 
-      // (optional) by default, 'localStorage' is used
-      // storage: createJSONStorage(() => sessionStorage), 
+      name: "chat2chat", // localstorage
     }
   )
 );

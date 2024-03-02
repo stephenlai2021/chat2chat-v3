@@ -81,7 +81,7 @@ export default function ChatList({ userData }) {
   const handleTabClick = (tab) => setActiveTab(tab);
 
   /* 
-    Donot delete this effect !!! 
+    Do not delete this effect !!! 
     get users once
   */
   // useEffect(() => {
@@ -275,7 +275,6 @@ export default function ChatList({ userData }) {
   }, []);
 
   return (
-    // ${size.width <= 800 ? 'hidden w-0' : 'flex'}
     <div
       className={`
       ${

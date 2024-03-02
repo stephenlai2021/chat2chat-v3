@@ -10,12 +10,12 @@ import useWindowSize from "@/hooks/useWindowSize";
 import { useState } from "react";
 
 export default function DashoardPage() {
-  // const [windowSize, setWindowSize] = useState(null);
+  const [windowSize, setWindowSize] = useState(null);
 
-  // const pathname = usePathname();
+  const pathname = usePathname();
   // console.log("pathname: ", pathname);
 
-  // const size = useWindowSize();
+  const size = useWindowSize();
   // console.log("window size: ", size);
 
   return (

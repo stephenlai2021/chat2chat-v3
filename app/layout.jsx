@@ -15,7 +15,6 @@ import getUserSession from "@/lib/supabase/getUserSession";
 
 /* components */
 import ChatList from "@/components/main/ChatList";
-import ChatRoom from "@/components/chatroom/ChatRoom";
 
 /* firebase */
 import { firestore } from "@/lib/firebase/client";
