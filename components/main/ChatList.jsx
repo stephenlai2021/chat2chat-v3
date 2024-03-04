@@ -132,7 +132,7 @@ export default function ChatList() {
       setFilteredChatrooms(chatrooms);
 
       if (chatrooms.length !== 0) setChatListLoading(false);
-      console.log("get chatrooms | realtime: ", chatrooms);
+      console.log("chatrooms: ", chatrooms);
     });
     return () => unsubChatrooms();
   }, [userData]);
