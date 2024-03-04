@@ -113,7 +113,7 @@ export default function LoginPage() {
   return (
     <div
       className={`
-      flex flex-col justify-center items-center w-screen h-screen font-primary px-8
+      flex flex-col justify-center items-center h-screen w-full font-primary px-8
     `}
     >
       <form
@@ -173,9 +173,9 @@ export default function LoginPage() {
         </div>
 
         {/* Register link  */}
-        <span className="text-base-content">
+        <span className="text-base-content text-sm">
           Don't have an account?{" "}
-          <Link href="/register" className="text-base-content hover:underline">
+          <Link href="/register" className="text-base-content text-sm hover:underline">
             Register
           </Link>
         </span>

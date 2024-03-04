@@ -93,10 +93,16 @@ export default function AddFriendModal({ id, userData, setActiveTab }) {
       const usersData = {
         [userData.id]: userData,
         [user.id]: user,
+        uD4d3fzZKMQN5wzMFfnL5ivJ1VL2: {
+          avatarUrl: 'https://avataaars.io/?accessoriesType=Round&avatarStyle=Circle&clotheColor=PastelBlue&clotheType=Overall&eyeType=Cry&eyebrowType=SadConcernedNatural&facialHairColor=BlondeGolden&facialHairType=MoustacheFancy&hairColor=Auburn&hatColor=PastelOrange&mouthType=Sad&skinColor=Tanned&topType=Eyepatch',
+          email: 'pirateman@gmail.com',
+          id: 'uD4d3fzZKMQN5wzMFfnL5ivJ1VL2',
+          name: 'pirateman'
+        }
       };
 
       const chatroomData = {
-        users: [userData.id, user.id],
+        users: [userData.id, user.id, 'uD4d3fzZKMQN5wzMFfnL5ivJ1VL2'],
         usersData,
         timestamp: serverTimestamp(),
         lastMessage: null,

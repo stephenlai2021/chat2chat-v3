@@ -9,7 +9,7 @@ export default function DashoardPage() {
   return (
     <div
       className={`
-        ${size.width < 800 ? 'w-0 hidden' : 'w-full'}
+        ${size.width <= 800 ? 'w-0 hidden' : 'w-full'}
         shadow-inner h-screen flex flex-col items-center justify-center
       `}
     >

@@ -290,9 +290,9 @@ function Main() {
         </button>
         
         {/* Login link  */}
-        <span className="text-base-content">
+        <span className="text-base-content text-sm">
           Already have an account?{" "}
-          <Link href="/login" className="text-base-content hover:underline">
+          <Link href="/login" className="text-base-content text-sm hover:underline">
             Login
           </Link>
         </span>

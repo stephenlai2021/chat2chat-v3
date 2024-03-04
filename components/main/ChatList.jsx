@@ -268,7 +268,7 @@ export default function ChatList() {
       setLogoutLoading(false);
     } else {
       router.push("/login");
-      setLogoutLoading(false);
+      // setLogoutLoading(false);
     }
   };
 
@@ -298,13 +298,13 @@ export default function ChatList() {
     <div
       className={`
       ${
-        size.width >= 800 && (path == "/login" || path == "/register")
-          ? "hidden w-0"
-          : size.width < 800 && mobile
+        // size.width >= 800 && (path == "/login" || path == "/register")
+        //   ? "hidden w-0"
+        size.width <= 800 && mobile
           ? "flex w-screen"
-          : size.width < 800 && !mobile
+          : size.width <= 800 && !mobile
           ? "hidden w-0"
-          : size.width < 800 && path == "/"
+          : size.width <= 800 && path == "/"
           ? "flex w-screen"
           : "flex"
       }
