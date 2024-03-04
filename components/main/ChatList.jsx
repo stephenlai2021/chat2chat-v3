@@ -6,26 +6,27 @@ import { useEffect, useState, useRef } from "react";
 /* firebase */
 import { firestore } from "@/lib/firebase/client";
 import {
-  collection,
-  onSnapshot,
+  doc,
   query,
   where,
+  getDoc,
   orderBy,
+  onSnapshot,
+  collection,
   // addDoc,
   // updateDoc,
   // serverTimestamp,
-  // doc,
   // or,
   // getDocs,
-  // getDoc,
 } from "firebase/firestore";
 // import { signOut } from "firebase/auth";
 
 /* next */
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 /* supabase */
 import useSupabaseClient from "@/lib/supabase/client";
+// import getUserSession from "@/lib/supabase/getUserSession";
 
 /* utils */
 import { languages } from "@/data/utils";
@@ -53,36 +54,50 @@ import { useStore } from "@/zustand/store";
 /* hooks */
 import useWindowSize from "@/hooks/useWindowSize";
 
-export default function ChatList({ userData }) {
-  // console.log('user data: ', userData)
-
-  const { setSelectedChatroom, mobile, toggleMobile } =
-    useStore();
-
-  const [activeTab, setActiveTab] = useState("privateChat");
+// export default function ChatList({ userData }) {
+export default function ChatList() {
+  const [userData, setUserData] = useState({});
   const [otherData, setOtherData] = useState({});
-  const [logoutLoading, setLogoutLoading] = useState(false);
-  const [chatListLoading, setChatListLoading] = useState(true);
   const [isSearch, setIsSearch] = useState(false);
-  const [userChatrooms, setUserChatrooms] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [drawerOpenState, setDrawerOpenState] = useState(true);
+  const [userChatrooms, setUserChatrooms] = useState([]);
+  const [activeTab, setActiveTab] = useState("privateChat");
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const [isDrawerClosed, setIsDrawerClosed] = useState(false);
+  const [chatListLoading, setChatListLoading] = useState(true);
   const [filteredChatrooms, setFilteredChatrooms] = useState([]);
   // const [users, setUsers] = useState([]);
 
+  const path = usePathname();
   const router = useRouter();
   const size = useWindowSize();
   const searchTermRef = useRef(null);
   const supabase = useSupabaseClient();
-
-  useEffect(() => {
-    if (searchTermRef.current) searchTermRef.current.focus();
-  }, [searchTerm]);
+  const { setSelectedChatroom, mobile, toggleMobile } = useStore();
 
   const handleTabClick = (tab) => setActiveTab(tab);
 
+  const getUserData = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const userCred = session?.user;
+    const docRef = doc(firestore, "users", userCred.email);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      setUserData(docSnap.data());
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
   /* 
-    Do not delete this effect !!! 
-    get users once
+    Get Users (Do not delete !!!)
   */
   // useEffect(() => {
   //   const usersRef = collection(firestore, "users");
@@ -96,7 +111,7 @@ export default function ChatList({ userData }) {
   // }, []);
 
   /* 
-    get chatrooms once
+    Get Chatrooms
   */
   useEffect(() => {
     // Do not delete this line !!!
@@ -116,16 +131,15 @@ export default function ChatList({ userData }) {
       setUserChatrooms(chatrooms);
       setFilteredChatrooms(chatrooms);
 
-      // if (chatrooms.length !== 0) setChatListLoading(false);
+      if (chatrooms.length !== 0) setChatListLoading(false);
       console.log("get chatrooms | realtime: ", chatrooms);
     });
     return () => unsubChatrooms();
   }, [userData]);
 
-  useEffect(() => {
-    if (userChatrooms.length !== 0) setChatListLoading(false);
-      // console.log("get chatrooms | useEffect: ", userChatrooms);
-  }, [userChatrooms])
+  // useEffect(() => {
+  //   if (userChatrooms.length !== 0) setChatListLoading(false);
+  // }, [userChatrooms]);
 
   /* 
     Do not delete this function !!!
@@ -229,13 +243,26 @@ export default function ChatList({ userData }) {
     };
 
     /* save chatroom in store */
-    toggleMobile()
+    toggleMobile();
     setSelectedChatroom(data);
     router.push(`/chatroom/${chatroom.id}`);
 
     // const tempData = data.otherData;
     // setOtherData(tempData);
   };
+
+  const handleDrawerState = (e) => {
+    // if (e.target.checked) setDrawerOpenState(true)
+    // if (!e.target.checked) setDrawerOpenState(false)
+    console.log('drawer state: ', e.target.checked)
+    setDrawerOpenState(e.target.checked)
+  }
+
+  useEffect(() => {
+    setDrawerOpenState(true)
+  // }, [drawerOpenState])
+  }, [])
+
 
   const logoutClick = async () => {
     /* set user status is optional, because it cost too much ! */
@@ -246,7 +273,7 @@ export default function ChatList({ userData }) {
     if (error) {
       console.log("signout error: ", error);
       setLogoutLoading(false);
-    } else {
+    } else {      
       router.push("/login");
       setLogoutLoading(false);
     }
@@ -281,6 +308,8 @@ export default function ChatList({ userData }) {
         size.width <= 800 && mobile
           ? "flex w-screen"
           : size.width <= 800 && !mobile
+          ? "hidden w-0"
+          : (size.width >= 800 && path == "/login") || path == "/register"
           ? "hidden w-0"
           : "flex"
       }
@@ -348,6 +377,8 @@ export default function ChatList({ userData }) {
               <input
                 id="navbar-drawer-settings"
                 type="checkbox"
+                value={drawerOpenState}
+                onChange={handleDrawerState}
                 className="drawer-toggle"
               />
               <div className="flex justify-center">
@@ -356,7 +387,6 @@ export default function ChatList({ userData }) {
                   aria-label="close sidebar"
                   className="mx-2 py-2"
                 >
-                  {/* <RxAvatar className="w-[24px] h-[24px] hover:cursor-pointer text-base-content" /> */}
                   <IoSettingsOutline className="w-[23px] h-[23px] hover:cursor-pointer text-base-content" />
                 </label>
               </div>
@@ -371,9 +401,9 @@ export default function ChatList({ userData }) {
                   <li className="pl-2 hidden mobile-show">
                     <a>
                       <UsersCard
-                        name={userData.name}
-                        email={userData.email}
-                        avatarUrl={userData.avatarUrl}
+                        name={userData?.name}
+                        email={userData?.email}
+                        avatarUrl={userData?.avatarUrl}
                         found={false}
                       />
                     </a>
@@ -401,12 +431,13 @@ export default function ChatList({ userData }) {
                       </li>
                       <div className="divider" />
                       <li>
-                        <a onClick={logoutClick}>
-                          Logout{" "}
-                          {logoutLoading && (
-                            <div className="loading loading-spinner loading-xs text-base-content flex justify-center ml-2"></div>
+                        <div onClick={logoutClick}>
+                          {logoutLoading ? (
+                            <div className="loading loading-spinner loading-xs text-base-content flex justify-center ml-2" />
+                          ) : (
+                            "Logout"
                           )}
-                        </a>
+                        </div>
                       </li>
                     </ul>
                   </li>
@@ -422,7 +453,7 @@ export default function ChatList({ userData }) {
             ${size.width <= 800 ? "mb-[56px]" : ""}
             overflow-y-auto overflow-x-hidden h-full shadow-inner
           `}
-          >
+        >
           {/* search input */}
           <div
             className={`relative flex justify-center mx-3

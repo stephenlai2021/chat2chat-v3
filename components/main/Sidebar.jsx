@@ -52,9 +52,9 @@ export default function Sidabar({
       <dialog id="user-info-modal" className="modal">
         <div className="modal-box">
           <UsersCard
-            name={userData.name}
-            email={userData.email}
-            avatarUrl={userData.avatarUrl}
+            name={userData?.name}
+            email={userData?.email}
+            avatarUrl={userData?.avatarUrl}
             found={false}
           />
         </div>

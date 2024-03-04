@@ -188,7 +188,7 @@ function Main() {
     );
 
   return (
-    <div className="flex justify-center items-center h-screen font-primary px-8">
+    <div className="flex justify-center items-center w-screen h-screen font-primary px-8">
       <form
         onSubmit={handleRegister}
         className="space-y-4 w-full h-full max-w-[600px] pt-10 pl-10 pr-10 form-padding"

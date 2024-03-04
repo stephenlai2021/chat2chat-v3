@@ -29,15 +29,22 @@ import useSupabaseClient from "@/lib/supabase/client";
 import { toast } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 
-function Main() {
+/* zustand */
+import { useStore } from "@/zustand/store";
+
+/* hooks */
+import useWindowSize from "@/hooks/useWindowSize";
+
+export default function LoginPage() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-
+  const size = useWindowSize();
   const supabase = useSupabaseClient();
+  const { selectedChatroom, mobile, toggleMobile } = useStore();
 
   const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -104,7 +111,11 @@ function Main() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen font-primary px-8">
+    <div
+      className={`
+      flex flex-col justify-center items-center w-screen h-screen font-primary px-8
+    `}
+    >
       <form
         onSubmit={handleLogin}
         className="space-y-4 w-full max-w-[600px] pt-10 pl-10 pr-10 form-padding"
@@ -185,4 +196,4 @@ function Main() {
   );
 }
 
-export default Main;
+// export default Main;
