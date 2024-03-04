@@ -243,7 +243,10 @@ export default function ChatroomIdPage() {
           <FaArrowLeft className="text-base-content w-[18px] h-[18px]" />
         </div>
 
-        <div className="ml-1 border-base-content avatar">
+        <div className={`
+          ${size.width > 800 ? 'ml-4' : 'm-1'}
+          border-base-content avatar
+        `}>
           <div
             className="w-9 h-9 rounded-full hover:cursor-pointer"
             onClick={toggleMobile}
