@@ -22,20 +22,23 @@ import useWindowSize from "@/hooks/useWindowSize";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "Chat2Chat-V3",
-  description:
-    "an instant messenger that brings up your communication to a incredible awesome level 😍",
-  icons: {
-    icon: "/chat-icon.png",
-  },
-  content: {
-    width: "device-width",
-    "user-scalable": "no",
-    "initial-scale": "1.0",
-    "maximum-scale": "1.0",
-  },
-};
+/* 
+  metadata is not allowed in client component(Do not delete !!!)
+*/
+// export const metadata = {
+//   title: "Chat2Chat-V3",
+//   description:
+//     "an instant messenger that brings up your communication to a incredible awesome level 😍",
+//   icons: {
+//     icon: "/chat-icon.png",
+//   },
+//   content: {
+//     width: "device-width",
+//     "user-scalable": "no",
+//     "initial-scale": "1.0",
+//     "maximum-scale": "1.0",
+//   },
+// };
 
 export default function RootLayout({ children }) {
   const path = usePathname();
