@@ -39,18 +39,18 @@ export default function ChatroomIdPage() {
   const { selectedChatroom, mobile, toggleMobile } = useStore();
 
   const me = selectedChatroom?.myData;
-  const other = selectedChatroom?.otherData;
+  const theOther = selectedChatroom?.otherData;
   const chatroomId = selectedChatroom?.id;
 
   const messagesContainerRef = useRef(null);
 
   const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [others, setOthers] = useState([]);
 
-  const [otherUser, setOtherUser] = useState(null);
+  const [other, setOther] = useState(null);
   const [otherUserData, setOtherUserData] = useState(null);
   const [msgCount, setMsgCount] = useState(0);
   const [isMessageBottom, setIsMessageBottom] = useState(false);
@@ -102,7 +102,8 @@ export default function ChatroomIdPage() {
         lastImage: image ? image : "",
         lastMessage: message ? message : "",
         lastMessageSentTime: serverTimestamp(),
-        [`usersData.${otherUserData.id}.newMessage`]: otherUserData.newMessage + 1
+        [`usersData.${otherUserData.id}.newMessage`]:
+          otherUserData.newMessage + 1,
       });
     } catch (error) {
       console.error("Error sending message:", error.message);
@@ -126,8 +127,8 @@ export default function ChatroomIdPage() {
       messagesContainerRef.current.scrollTop =
         messagesContainerRef.current.scrollHeight;
     }
-  // }, [messagesContainerRef, messages]);
-  }, [messages]);
+  }, [messagesContainerRef, messages]);
+  // }, [messages]);
 
   /* 
     Hide chat bubble loading skeleton after 3s 
@@ -146,7 +147,7 @@ export default function ChatroomIdPage() {
     // Do not delete this line !!!
     if (!chatroomId) return;
 
-    setLoading(true);
+    // setLoading(true);
     const unsubMsgs = onSnapshot(
       query(
         collection(firestore, "messages"),
@@ -168,18 +169,23 @@ export default function ChatroomIdPage() {
     return () => unsubMsgs();
   }, [chatroomId]);
 
+  // useEffect(() => {
+  //   if (messages.length !== 0) setLoading(false);
+  //   console.log("messages: ", messages);
+  // }, [messages]);
+
   /* 
     Get Other User
   */
-  // useEffect(() => {
-  //   const unsubOtherUser = onSnapshot(
-  //     doc(firestore, "users", other.email),
-  //     (doc) => {
-  //       setOtherUser(doc.data());
-  //     }
-  //   );
-  //   return () => unsubOtherUser();
-  // }, [other]);
+  useEffect(() => {
+    const unsubOtherUser = onSnapshot(
+      doc(firestore, "users", theOther.email),
+      (doc) => {
+        setOther(doc.data());
+      }
+    );
+    return () => unsubOtherUser();
+  }, [theOther]);
 
   /* 
     Get Other User Data (Do not delete !!!)
@@ -198,7 +204,6 @@ export default function ChatroomIdPage() {
       setOtherUserData(otherUserData);
     });
     return () => unsub();
-  // }, [chatroomId]);
   }, []);
 
   return (
@@ -216,7 +221,7 @@ export default function ChatroomIdPage() {
     >
       {/* top menu */}
       <div className="h-[64px] flex items-center shadow-inner">
-        {/* {loading ? (
+        {loading ? (
           <div className="hidde show-fle flex">
             <div className="flex items-end ml-4 pb-1 hidden show-flex">
               <div className="skeleton rounded w-[18px] h-[18px] pt-"></div>
@@ -227,8 +232,8 @@ export default function ChatroomIdPage() {
             </div>
           </div>
         ) : (
-          <> */}
-        {/* <div
+          <>
+        <div
           className={`
             ml-4 pr-1 pt-3 hover:cursor-pointer
             ${size.width <= 800 ? "flex" : "hidden"} 
@@ -236,10 +241,11 @@ export default function ChatroomIdPage() {
           onClick={toggleMobile}
         >
           <FaArrowLeft className="text-base-content w-[18px] h-[18px]" />
-        </div> */}
-        <div className="ml-4 border-base-content avatar">
+        </div>
+
+        <div className="ml-1 border-base-content avatar">
           <div
-            className="w-9 h-9 rounded-full bg-[url('/avatar.png')] hover:cursor-pointer"
+            className="w-9 h-9 rounded-full hover:cursor-pointer"
             onClick={toggleMobile}
           >
             {other?.avatarUrl ? (
@@ -252,8 +258,9 @@ export default function ChatroomIdPage() {
         <div className="h-8 font-semibold flex items-end ml-2 text-base-content">
           {other?.name}
         </div>
-        {/* </>
-        )} */}
+
+        </>
+        )}
       </div>
 
       <div
@@ -261,8 +268,8 @@ export default function ChatroomIdPage() {
         className="shadow-inner flex-1 overflow-auto py-5 pl-6"
       >
         {/* {messages?.map((message) => ( */}
-        {/* {!loading && */}
-          {messages?.map((message) => (
+        {!loading &&
+          messages?.map((message) => (
             <MessageCard
               me={me}
               key={message.id}
@@ -273,8 +280,7 @@ export default function ChatroomIdPage() {
             />
           ))}
 
-        {/* {loading && <MessageSkeleton />} */}
-        {/* {loading && size.width < 800 && <MessageSkeleton />} */}
+        {loading && <MessageSkeleton />}
       </div>
 
       <MessageInput

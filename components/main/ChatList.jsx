@@ -245,17 +245,7 @@ export default function ChatList() {
 
     // const tempData = data.otherData;
     // setOtherData(tempData);
-  };
-
-  const handleDrawerState = (e) => {
-    console.log("drawer state: ", e.target.checked);
-    setDrawerOpenState(e.target.checked);
-  };
-
-  useEffect(() => {
-    setDrawerOpenState(true);
-    // }, [drawerOpenState])
-  }, []);
+  }; 
 
   const logoutClick = async () => {
     /* set user status is optional, because it cost too much ! */
@@ -268,7 +258,6 @@ export default function ChatList() {
       setLogoutLoading(false);
     } else {
       router.push("/login");
-      // setLogoutLoading(false);
     }
   };
 
@@ -298,8 +287,6 @@ export default function ChatList() {
     <div
       className={`
       ${
-        // size.width >= 800 && (path == "/login" || path == "/register")
-        //   ? "hidden w-0"
         size.width <= 800 && mobile
           ? "flex w-screen"
           : size.width <= 800 && !mobile
