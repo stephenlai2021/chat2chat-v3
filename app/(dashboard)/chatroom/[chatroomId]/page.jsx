@@ -162,7 +162,7 @@ export default function ChatroomIdPage() {
         setMessages(messages);
 
         if (messages.length !== 0) setLoading(false);
-        console.log("get messages | realtime: ", messages);
+        console.log("messages: ", messages);
       }
     );
     return () => unsubMsgs();
@@ -189,13 +189,12 @@ export default function ChatroomIdPage() {
   useEffect(() => {
     const unsub = onSnapshot(doc(firestore, "chatrooms", chatroomId), (doc) => {
       const selectedChatroom = doc.data();
-      console.log("get selectedChatroom: ", selectedChatroom);
+      console.log("selectedChatroom: ", selectedChatroom);
 
       const otherUserData =
         selectedChatroom.usersData[
           selectedChatroom.users.find((id) => id !== me.id)
         ];
-      console.log("Get otherUserData: ", otherUserData);
       setOtherUserData(otherUserData);
     });
     return () => unsub();
