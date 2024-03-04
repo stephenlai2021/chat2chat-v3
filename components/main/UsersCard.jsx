@@ -100,13 +100,14 @@ function UsersCard({
           </div>
 
           {/* message count is optional !!! */}
-          {/* <div
-            className={`${
-              newMessage >= 1 ? "block badge badge-primary" : "hidden"
-            }`}
+          <div
+            className={`
+              ${newMessage >= 1 ? "block badge badge-primary" : "hidden"}
+              text-xs flex items-center
+            `}
           >
             {newMessage}
-          </div> */}
+          </div>
 
         </div>
       </div>

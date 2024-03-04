@@ -137,10 +137,6 @@ export default function ChatList() {
     return () => unsubChatrooms();
   }, [userData]);
 
-  // useEffect(() => {
-  //   if (userChatrooms.length !== 0) setChatListLoading(false);
-  // }, [userChatrooms]);
-
   /* 
     Do not delete this function !!!
     This function reads through chatrooms collection, 
@@ -252,17 +248,14 @@ export default function ChatList() {
   };
 
   const handleDrawerState = (e) => {
-    // if (e.target.checked) setDrawerOpenState(true)
-    // if (!e.target.checked) setDrawerOpenState(false)
-    console.log('drawer state: ', e.target.checked)
-    setDrawerOpenState(e.target.checked)
-  }
+    console.log("drawer state: ", e.target.checked);
+    setDrawerOpenState(e.target.checked);
+  };
 
   useEffect(() => {
-    setDrawerOpenState(true)
-  // }, [drawerOpenState])
-  }, [])
-
+    setDrawerOpenState(true);
+    // }, [drawerOpenState])
+  }, []);
 
   const logoutClick = async () => {
     /* set user status is optional, because it cost too much ! */
@@ -273,7 +266,7 @@ export default function ChatList() {
     if (error) {
       console.log("signout error: ", error);
       setLogoutLoading(false);
-    } else {      
+    } else {
       router.push("/login");
       setLogoutLoading(false);
     }
@@ -305,12 +298,14 @@ export default function ChatList() {
     <div
       className={`
       ${
-        size.width <= 800 && mobile
+        size.width >= 800 && (path == "/login" || path == "/register")
+          ? "hidden w-0"
+          : size.width < 800 && mobile
           ? "flex w-screen"
-          : size.width <= 800 && !mobile
+          : size.width < 800 && !mobile
           ? "hidden w-0"
-          : (size.width >= 800 && path == "/login") || path == "/register"
-          ? "hidden w-0"
+          : size.width < 800 && path == "/"
+          ? "flex w-screen"
           : "flex"
       }
       h-screen
@@ -377,8 +372,8 @@ export default function ChatList() {
               <input
                 id="navbar-drawer-settings"
                 type="checkbox"
-                value={drawerOpenState}
-                onChange={handleDrawerState}
+                // value={drawerOpenState}
+                // onChange={handleDrawerState}
                 className="drawer-toggle"
               />
               <div className="flex justify-center">
@@ -513,11 +508,11 @@ export default function ChatList() {
                         chatroom.users.find((id) => id !== userData?.id)
                       ].avatarUrl
                     }
-                    // newMessage={
-                    //   chatroom.usersData[
-                    //     chatroom.users.find((id) => id == userData?.id)
-                    //   ].newMessage
-                    // }
+                    newMessage={
+                      chatroom.usersData[
+                        chatroom.users.find((id) => id == userData?.id)
+                      ].newMessage
+                    }
                     // newMessage={chatroom.newMessage}
                     lastImage={chatroom.lastImage}
                     lastMessage={chatroom.lastMessage}

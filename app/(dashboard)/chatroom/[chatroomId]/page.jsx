@@ -45,7 +45,7 @@ export default function ChatroomIdPage() {
   const messagesContainerRef = useRef(null);
 
   const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [others, setOthers] = useState([]);
@@ -62,7 +62,7 @@ export default function ChatroomIdPage() {
       /* updateDoc triggers snapshot twice which is a bug !!! */
       const chatroomRef = doc(firestore, "chatrooms", chatroomId);
       await updateDoc(chatroomRef, {
-        lastMessage: "message withdrawn",
+        lastMessage: `message removed`,
         lastMessageSentTime: serverTimestamp(),
       });
     } catch (err) {
@@ -102,7 +102,7 @@ export default function ChatroomIdPage() {
         lastImage: image ? image : "",
         lastMessage: message ? message : "",
         lastMessageSentTime: serverTimestamp(),
-        // [`usersData.${otherUserData.id}.newMessage`]: otherUserData.newMessage + 1
+        [`usersData.${otherUserData.id}.newMessage`]: otherUserData.newMessage + 1
       });
     } catch (error) {
       console.error("Error sending message:", error.message);
@@ -126,10 +126,11 @@ export default function ChatroomIdPage() {
       messagesContainerRef.current.scrollTop =
         messagesContainerRef.current.scrollHeight;
     }
-  }, [messagesContainerRef, messages]);
+  // }, [messagesContainerRef, messages]);
+  }, [messages]);
 
   /* 
-    hide chat bubble loading skeleton after 3s 
+    Hide chat bubble loading skeleton after 3s 
   */
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -139,7 +140,7 @@ export default function ChatroomIdPage() {
   }, [loading]);
 
   /* 
-    get messages 
+    Get Messages 
   */
   useEffect(() => {
     // Do not delete this line !!!
@@ -160,40 +161,15 @@ export default function ChatroomIdPage() {
         }));
         setMessages(messages);
 
-        if (messages.length !== 0) {
-          setLoading(false);
-        }
+        if (messages.length !== 0) setLoading(false);
         console.log("get messages | realtime: ", messages);
       }
     );
     return () => unsubMsgs();
   }, [chatroomId]);
 
-  // useEffect(() => {
-  //   if (messages.length !== 0) {
-  //     setLoading(false)
-  //     console.log("get messages | useEffect: ", messages);
-  //   }
-  // }, [messages, loading])
-
-  /*
-    Scroll to the bottom when messages change
-  */
-  // useEffect(() => {
-  //   if (messagesContainerRef.current) {
-  //     messagesContainerRef.current.scrollTop =
-  //       messagesContainerRef.current.scrollHeight;
-  //   }
-  // }, [messages]);
-
-  // useEffect(() => {
-  //   if (size.width <= 800) {
-  //     setMobile(true)
-  //   }
-  // }, [size, mobile])
-
   /* 
-    get other user in realtime 
+    Get Other User
   */
   // useEffect(() => {
   //   const unsubOtherUser = onSnapshot(
@@ -206,25 +182,24 @@ export default function ChatroomIdPage() {
   // }, [other]);
 
   /* 
-    Do not delete this block !!!
-    Get other user data
+    Get Other User Data (Do not delete !!!)
     We need realtime other user data to set the message count,
     This is optional, because it increases the cost !!!
   */
-  // useEffect(() => {
-  //   const unsub = onSnapshot(doc(firestore, "chatrooms", chatRoomId), (doc) => {
-  //     const selectedChatroom = doc.data();
-  //     console.log("get selected chatroom | ChatRoom: ", selectedChatroom);
+  useEffect(() => {
+    const unsub = onSnapshot(doc(firestore, "chatrooms", chatroomId), (doc) => {
+      const selectedChatroom = doc.data();
+      console.log("get selected chatroom | ChatRoom: ", selectedChatroom);
 
-  //     const otherUserData =
-  //       selectedChatroom.usersData[
-  //         selectedChatroom.users.find((id) => id !== me.id)
-  //       ];
-  //     console.log("other user data: ", otherUserData);
-  //     setOtherUserData(otherUserData);
-  //   });
-  //   return () => unsub();
-  // }, [chatRoomId]);
+      const otherUserData =
+        selectedChatroom.usersData[
+          selectedChatroom.users.find((id) => id !== me.id)
+        ];
+      console.log("other user data: ", otherUserData);
+      setOtherUserData(otherUserData);
+    });
+    return () => unsub();
+  }, [chatroomId]);
 
   return (
     <div
@@ -285,20 +260,21 @@ export default function ChatroomIdPage() {
         ref={messagesContainerRef}
         className="shadow-inner flex-1 overflow-auto py-5 pl-6"
       >
-        {/* {!loading &&
-          messages?.map((message) => ( */}
-        {messages?.map((message) => (
-          <MessageCard
-            me={me}
-            key={message.id}
-            other={other}
-            others={others}
-            message={message}
-            deleteMsg={deleteMsg}
-          />
-        ))}
+        {/* {messages?.map((message) => ( */}
+        {/* {!loading && */}
+          {messages?.map((message) => (
+            <MessageCard
+              me={me}
+              key={message.id}
+              other={other}
+              others={others}
+              message={message}
+              deleteMsg={deleteMsg}
+            />
+          ))}
 
         {/* {loading && <MessageSkeleton />} */}
+        {/* {loading && size.width < 800 && <MessageSkeleton />} */}
       </div>
 
       <MessageInput
