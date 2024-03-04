@@ -189,17 +189,18 @@ export default function ChatroomIdPage() {
   useEffect(() => {
     const unsub = onSnapshot(doc(firestore, "chatrooms", chatroomId), (doc) => {
       const selectedChatroom = doc.data();
-      console.log("get selected chatroom | ChatRoom: ", selectedChatroom);
+      console.log("get selectedChatroom: ", selectedChatroom);
 
       const otherUserData =
         selectedChatroom.usersData[
           selectedChatroom.users.find((id) => id !== me.id)
         ];
-      console.log("other user data: ", otherUserData);
+      console.log("Get otherUserData: ", otherUserData);
       setOtherUserData(otherUserData);
     });
     return () => unsub();
-  }, [chatroomId]);
+  // }, [chatroomId]);
+  }, []);
 
   return (
     <div
