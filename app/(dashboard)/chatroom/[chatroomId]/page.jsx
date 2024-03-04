@@ -145,7 +145,7 @@ export default function ChatroomIdPage() {
   */
   useEffect(() => {
     // Do not delete this line !!!
-    if (!chatroomId) return;
+    // if (!chatroomId) return;
 
     // setLoading(true);
     const unsubMsgs = onSnapshot(
@@ -167,7 +167,8 @@ export default function ChatroomIdPage() {
       }
     );
     return () => unsubMsgs();
-  }, [chatroomId]);
+  // }, [chatroomId]);
+  }, []);
 
   // useEffect(() => {
   //   if (messages.length !== 0) setLoading(false);
