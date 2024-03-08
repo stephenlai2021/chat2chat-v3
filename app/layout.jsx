@@ -67,8 +67,7 @@ export default function RootLayout({ children }) {
             <Toaster position="bottom-center" />
             <div className="max-w-[1200px] mx-auto bg-base-200 flex">
               <ChatList />
-              {path != "/" && size.width > 800 && { children }}
-              {/* { children } */}
+              { children }
             </div>
           </DaisyUIThemeProvider>
         </body>

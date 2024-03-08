@@ -232,6 +232,7 @@ export default function ChatList() {
   // };
 
   const openChat = async (chatroom) => {
+    // setSelectedChatroom(null);
     const data = {
       id: chatroom.id,
       myData: userData,
