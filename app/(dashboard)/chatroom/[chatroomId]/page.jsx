@@ -36,12 +36,7 @@ import { useStore } from "@/zustand/store";
 // export default function ChatroomIdPage({ params: { chatroomId } }) {
 export default function ChatroomIdPage() {
   const size = useWindowSize();
-  const { selectedChatroom, setSelectedChatroom, mobile, toggleMobile } = useStore();
-
-  // useEffect(() => {
-  //   console.log('selectedChatroom: ', selectedChatroom)
-  //   setSelectedChatroom({})
-  // }, [selectedChatroom])
+  const { selectedChatroom, mobile, toggleMobile } = useStore();
 
   const me = selectedChatroom?.myData;
   const theOther = selectedChatroom?.otherData;

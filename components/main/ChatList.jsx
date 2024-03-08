@@ -70,8 +70,6 @@ export default function ChatList() {
   // const [users, setUsers] = useState([]);
 
   const path = usePathname();
-  // console.log("path | chatlist: ", path);
-
   const router = useRouter();
   const size = useWindowSize();
   const searchTermRef = useRef(null);
@@ -232,18 +230,17 @@ export default function ChatList() {
   // };
 
   const openChat = async (chatroom) => {
-    // setSelectedChatroom(null);
+    setSelectedChatroom(null);
     const data = {
       id: chatroom.id,
       myData: userData,
       otherData:
         chatroom.usersData[chatroom.users.find((id) => id !== userData.id)],
-      // newMessage: chatroom.newMessage
     };
 
-    /* save chatroom in store */
     toggleMobile();
     setSelectedChatroom(data);
+    /* save chatroom in store */
     router.push(`/chatroom/${chatroom.id}`);
 
     // const tempData = data.otherData;
@@ -296,9 +293,7 @@ export default function ChatList() {
           ? "flex w-screen"
           : size.width <= 800 && !mobile
           ? "hidden w-0"
-          : // : size.width <= 800 && path == "/"
-            // ? "flex w-screen"
-            "flex"
+          : "flex"
       }
       h-screen
     `}
