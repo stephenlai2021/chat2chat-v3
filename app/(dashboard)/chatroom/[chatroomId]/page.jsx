@@ -170,11 +170,6 @@ export default function ChatroomIdPage() {
   // }, [chatroomId]);
   }, []);
 
-  // useEffect(() => {
-  //   if (messages.length !== 0) setLoading(false);
-  //   console.log("messages: ", messages);
-  // }, [messages]);
-
   /* 
     Get Other User
   */

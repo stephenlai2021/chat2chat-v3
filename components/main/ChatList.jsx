@@ -70,6 +70,8 @@ export default function ChatList() {
   // const [users, setUsers] = useState([]);
 
   const path = usePathname();
+  // console.log("path | chatlist: ", path);
+
   const router = useRouter();
   const size = useWindowSize();
   const searchTermRef = useRef(null);
@@ -245,7 +247,7 @@ export default function ChatList() {
 
     // const tempData = data.otherData;
     // setOtherData(tempData);
-  }; 
+  };
 
   const logoutClick = async () => {
     /* set user status is optional, because it cost too much ! */
@@ -287,13 +289,15 @@ export default function ChatList() {
     <div
       className={`
       ${
-        size.width <= 800 && mobile
+        size.width <= 800 && path == "/"
+          ? "flex w-screen"
+          : size.width <= 800 && mobile
           ? "flex w-screen"
           : size.width <= 800 && !mobile
           ? "hidden w-0"
-          : size.width <= 800 && path == "/"
-          ? "flex w-screen"
-          : "flex"
+          : // : size.width <= 800 && path == "/"
+            // ? "flex w-screen"
+            "flex"
       }
       h-screen
     `}
@@ -309,7 +313,9 @@ export default function ChatList() {
       <main
         className={`
         ${
-          size.width <= 800 && mobile
+          size.width <= 800 && path == "/"
+            ? "flex w-screen"
+            : size.width <= 800 && mobile
             ? "w-screen"
             : size.width <= 800 && !mobile
             ? "hidden w-0"

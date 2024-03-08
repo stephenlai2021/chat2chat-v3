@@ -44,6 +44,8 @@ export default function RootLayout({ children }) {
   const path = usePathname();
   const size = useWindowSize();
 
+  // console.log("path: ", path);
+
   if (path == "/login" || path == "/register") {
     return (
       <html lang="en">
@@ -65,7 +67,8 @@ export default function RootLayout({ children }) {
             <Toaster position="bottom-center" />
             <div className="max-w-[1200px] mx-auto bg-base-200 flex">
               <ChatList />
-              {children}
+              {path != "/" && size.width > 800 && { children }}
+              {/* { children } */}
             </div>
           </DaisyUIThemeProvider>
         </body>
