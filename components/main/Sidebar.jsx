@@ -28,9 +28,14 @@ export default function Sidabar({
 }) {
   const router = useRouter();
 
-  const handleAdd = () => {
-    handleTabClick("add");
-    router.push("/add");
+  const handleAddFriend = () => {
+    router.push("/chatroom/addfriend");
+    toggleMobile();
+  };
+
+  const handleCreateGroup = () => {
+    router.push("/chatroom/creategroup");
+    toggleMobile();
   };
 
   return (
@@ -76,7 +81,8 @@ export default function Sidabar({
       >
         <BsPersonAdd
           className={`w-[23px] h-[23px] hover:cursor-pointer text-base-content`}
-          onClick={() => router.push("/chatroom/addFriend")}
+          // onClick={() => router.push("/chatroom/addfriend")}
+          onClick={handleAddFriend}
         />
       </div>
 
@@ -90,7 +96,8 @@ export default function Sidabar({
       >
         <AiOutlineUsergroupAdd
           className={`w-[23px] h-[23px] hover:cursor-pointer text-base-content`}
-          onClick={() => router.push("/chatroom/createGroup")}
+          // onClick={() => router.push("/chatroom/creategroup")}
+          onClick={handleCreateGroup}
         />
       </div>
 

@@ -45,17 +45,17 @@ export default function BottomNavbar({
   } = useStore();
 
   const handleAddFriend = () => {
-    router.push("/chatroom/addFriend");
+    router.push("/chatroom/addfriend");
     toggleMobile();
   };
 
   const handleCreateGroup = () => {
-    router.push("/chatroom/createGroup");
+    router.push("/chatroom/creategroup");
     toggleMobile();
   };
 
   return (
-    <div className="mt-auto hidde users-mobil">
+    <div className="mt-auto hidden users-mobile">
       <div className="btm-na h-14 w-full flex bg-base-200 shadow-inner">
         {/* Add Friend */}
         {/* ${activeTab == "groupChat" ? "menu-top-active text-base-content" : ""} */}
