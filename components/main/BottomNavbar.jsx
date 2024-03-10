@@ -93,7 +93,7 @@ export default function BottomNavbar({
         </button>
 
         {/* user avatar */}
-        <div className="drawer z-[500]">
+        {/* <div className="drawer z-[500]">
           <input
             id="bottom-navbar-drawer-settings"
             type="checkbox"
@@ -163,7 +163,7 @@ export default function BottomNavbar({
               </li>
             </ul>
           </div>
-        </div>
+        </div> */}
 
         <AddFriendModal id="addFriendModal" userData={userData} />
       </div>

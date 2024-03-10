@@ -366,7 +366,7 @@ export default function ChatList() {
           /> */}
 
           {/* avatar-icon with drawer wrapper */}
-          {/* <div className="flex-none">
+          <div className="flex-none">
             <div className="drawer z-[200]">
               <input
                 id="navbar-drawer-settings"
@@ -435,7 +435,7 @@ export default function ChatList() {
                 </ul>
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
 
         {/* Body */}

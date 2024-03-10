@@ -95,14 +95,14 @@ export default function Sidabar({
       </div>
 
       {/* Avatar icon */}
-      {/* <div className="mt-auto mb-3">
+      <div className="mt-auto mb-3">
         <RxAvatar
           className="w-[24px] h-[24px] hover:cursor-pointer text-base-content"
           onClick={() => document.getElementById("user-info-modal").showModal()}
         />
-      </div> */}
+      </div>
 
-      <div className="flex-none mt-auto mb-3">
+      {/* <div className="flex-none mt-auto mb-3">
         <div className="drawer z-[200]">
           <input
             id="sidebar-drawer-settings"
@@ -167,7 +167,7 @@ export default function Sidabar({
             </ul>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* User Info Modal */}
       <dialog id="user-info-modal" className="modal">
