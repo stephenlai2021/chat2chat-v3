@@ -45,12 +45,12 @@ export default function BottomNavbar({
   } = useStore();
 
   const handleAddFriend = () => {
-    router.push("/addFriend");
+    router.push("/chatroom/addFriend");
     toggleMobile();
   };
 
   const handleCreateGroup = () => {
-    router.push("/createGroup");
+    router.push("/chatroom/createGroup");
     toggleMobile();
   };
 

@@ -76,7 +76,7 @@ export default function Sidabar({
       >
         <BsPersonAdd
           className={`w-[23px] h-[23px] hover:cursor-pointer text-base-content`}
-          onClick={() => router.push("/addFriend")}
+          onClick={() => router.push("/chatroom/addFriend")}
         />
       </div>
 
@@ -90,7 +90,7 @@ export default function Sidabar({
       >
         <AiOutlineUsergroupAdd
           className={`w-[23px] h-[23px] hover:cursor-pointer text-base-content`}
-          onClick={() => router.push("/createGroup")}
+          onClick={() => router.push("/chatroom/createGroup")}
         />
       </div>
 
