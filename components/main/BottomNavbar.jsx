@@ -55,13 +55,13 @@ export default function BottomNavbar({
   };
 
   return (
-    <div className="mt-auto hidden users-mobile">
-      <div className="btm-nav h-14 w-full flex bg-base-200 shadow-inner">
+    <div className="mt-auto hidde users-mobil">
+      <div className="btm-na h-14 w-full flex bg-base-200 shadow-inner">
         {/* Add Friend */}
         {/* ${activeTab == "groupChat" ? "menu-top-active text-base-content" : ""} */}
         <button
           className={`
-           w-1/3 flex justify-center items-center
+           w-1/2 flex flex-col justify-center items-center
            
           `}
         >
@@ -79,7 +79,7 @@ export default function BottomNavbar({
         {/* ${activeTab == "groupChat" ? "menu-top-active text-base-content" : ""} */}
         <button
           className={`
-            w-full flex justify-center items-center            
+            w-1/2 flex flex-col justify-center items-center            
           `}
         >
           {/* <Link href="/createGroup"> */}

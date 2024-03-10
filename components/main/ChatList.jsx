@@ -302,7 +302,7 @@ export default function ChatList() {
           ? "flex w-screen"
           : size.width <= 800 && mobile
           ? "flex w-screen"
-          : size.width <= 800 && !mobile 
+          : size.width <= 800 && !mobile
           ? "hidden w-0"
           : "flex"
       }
@@ -388,18 +388,14 @@ export default function ChatList() {
                   aria-label="close sidebar"
                   className="drawer-overlay"
                 ></label>
-                <ul className="pt-4 w-80 min-h-full bg-base-200 text-base-content">                 
-                  <li className="pl-2 hidden mobile-show">
-                    <a>
-                      <UsersCard
-                        name={userData?.name}
-                        email={userData?.email}
-                        avatarUrl={userData?.avatarUrl}
-                        found={false}
-                      />
-                    </a>
-                    <div className="divider" />
-                  </li>
+                <ul className="pt-4 w-80 min-h-full bg-base-200 text-base-content">
+                  <UsersCard
+                    name={userData?.name}
+                    email={userData?.email}
+                    avatarUrl={userData?.avatarUrl}
+                    found={false}
+                  />
+                  <div className="divider" />
                   <li>
                     <ul className="menu bg-base-200 w-ful rounded-box">
                       <li>
