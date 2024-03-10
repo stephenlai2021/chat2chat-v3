@@ -310,10 +310,10 @@ export default function ChatList() {
     >
       <Sidebar
         userData={userData}
-        activeTab={activeTab}
-        logoutLoading={logoutLoading}
-        logoutClick={logoutClick}
-        handleTabClick={handleTabClick}
+        // activeTab={activeTab}
+        // logoutLoading={logoutLoading}
+        // logoutClick={logoutClick}
+        // handleTabClick={handleTabClick}
       />
 
       <main
