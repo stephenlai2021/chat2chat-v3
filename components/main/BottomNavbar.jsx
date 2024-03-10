@@ -1,3 +1,9 @@
+"use client";
+
+/* next */
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 /* react-icons */
 import { IoMdChatboxes } from "react-icons/io";
 import { IoPersonAddSharp } from "react-icons/io5";
@@ -7,118 +13,159 @@ import { BsChatDots } from "react-icons/bs";
 import { RiUserAddLine } from "react-icons/ri";
 import { GrGroup } from "react-icons/gr";
 import { RxAvatar } from "react-icons/rx";
+import { BsPersonAdd } from "react-icons/bs";
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
 
 /* components */
 import UsersCard from "./UsersCard";
 import ThemeSwitcher from "../switcher/ThemeSwitcher";
+import AddFriendModal from "../modal/AddFriendModal";
 
 /* utils */
 import { languages } from "@/data/utils";
 
+/* zustand */
+import { useStore } from "@/zustand/store";
+
 export default function BottomNavbar({
   userData,
+  languages,
+  logoutLoading,
   activeTab,
   handleTabClick,
   logoutClick,
 }) {
+  const router = useRouter();
+  const {
+    setSelectedChatroom,
+    mobile,
+    toggleMobile,
+    userDataStore,
+    setUserDataStore,
+  } = useStore();
+
+  const handleAddFriend = () => {
+    router.push("/addFriend");
+    toggleMobile();
+  };
+
+  const handleCreateGroup = () => {
+    router.push("/createGroup");
+    toggleMobile();
+  };
+
   return (
     <div className="mt-auto hidden users-mobile">
-      <div className="btm-na h-14 w-full flex bg-base-200 shadow-inner">
-        {/* group button */}
+      <div className="btm-nav h-14 w-full flex bg-base-200 shadow-inner">
+        {/* Add Friend */}
+        {/* ${activeTab == "groupChat" ? "menu-top-active text-base-content" : ""} */}
         <button
-          className={`${
-            activeTab == "groupChat" ? "menu-top-active text-base-content" : ""
-          } w-1/2 flex justify-center items-center`}
+          className={`
+           w-1/3 flex justify-center items-center
+           
+          `}
         >
-          <GrGroup
-            className="w-[23px] h-[23px] font-bold text-base-content"
-            onClick={() => handleTabClick("groupChat")}
+          <BsPersonAdd
+            className={`w-[23px] h-[23px] font-bold text-base-content`}
+            onClick={handleAddFriend}
+            // onClick={() =>
+            //   document.getElementById("addFriendModal").showModal()
+            // }
           />
+          <span className="btm-nav-label text-xs">Add Friend</span>
         </button>
 
-        {/* chat button */}
+        {/* Create Group */}
+        {/* ${activeTab == "groupChat" ? "menu-top-active text-base-content" : ""} */}
         <button
-          className={`${
-            activeTab == "privateChat"
-              ? "menu-top-active text-base-content"
-              : ""
-          } w-1/2 flex justify-center items-center`}
+          className={`
+            w-full flex justify-center items-center            
+          `}
         >
-          <BsChatDots
-            className="w-6 h-6 text-base-content"
-            onClick={() => handleTabClick("privateChat")}
+          {/* <Link href="/createGroup"> */}
+          <AiOutlineUsergroupAdd
+            className="w-[24px] h-[24px] font-bold text-base-content "
+            // onClick={toggleMobile}
+            onClick={handleCreateGroup}
           />
+          <span className="btm-nav-label text-xs">Create Group</span>
+          {/* </Link> */}
         </button>
 
         {/* user avatar */}
-        {/* <div className="hidde navbar-sho w-1/3 border-2 border-red-300">
-          <div className="drawer h-full w-full flex items-center justify-center">
-            <input
-              id="navbar-drawer-settings"
-              type="checkbox"
-              className="drawer-toggle"
-            />
-
-            <div className="">
-              <label
-                htmlFor="navbar-drawer-settings"
-                aria-label="close sidebar"
-              >
-                <RxAvatar className="w-6 h-6 hover:cursor-pointer text-base-content" />
-              </label>
-            </div>
-
-            <div className="drawer-side">
-              <label
-                htmlFor="navbar-drawer-settings"
-                aria-label="close sidebar"
-                className="drawer-overlay"
-              ></label>
-              <ul className="pt-4 w-80 min-h-full bg-base-200 text-base-content">
-                <li className="pl-2">
-                  <a>
-                    <UsersCard
-                      name={userData.name}
-                      email={userData.email}
-                      avatarUrl={userData.avatarUrl}
-                      found={false}
-                    />
-                  </a>
-                </li>
-
-                <li>
-                  <ul className="menu bg-base-200 w-ful rounded-box">
-                    <div className="divider" />
-                    <li>
-                      <details>
-                        <summary className="">Theme</summary>
-                        <ThemeSwitcher />
-                      </details>
-                    </li>
-
-                    <li>
-                      <details>
-                        <summary>Language</summary>
-                        <ul>
-                          {languages.map((language) => (
-                            <li key={language.label}>
-                              <a>{language.value}</a>
-                            </li>
-                          ))}
-                        </ul>
-                      </details>
-                    </li>
-                    <div className="divider" />
-
-                    <li>
-                      <a onClick={logoutClick}>Logout</a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
+        <div className="drawer z-[500]">
+          <input
+            id="bottom-navbar-drawer-settings"
+            type="checkbox"
+            className="drawer-toggle"
+          />
+          <button
+            className={`
+              w-full h-full flex flex-col justify-cente items-center pt-[6px]
+            `}
+          >
+            <label
+              htmlFor="bottom-navbar-drawer-settings"
+              aria-label="close sidebar"
+              className=""
+            >
+              <RxAvatar className="w-[22px] h-[22px] hover:cursor-pointer text-base-content" />
+            </label>
+            <span className="btm-nav-label text-xs text-center mt-1">
+              Settings
+            </span>
+          </button>
+          <div className="drawer-side">
+            <label
+              htmlFor="bottom-navbar-drawer-settings"
+              aria-label="close sidebar"
+              className="drawer-overlay"
+            ></label>
+            <ul className="pt-4 w-80 min-h-full bg-base-200 text-base-content">
+              <UsersCard
+                name={userData?.name}
+                email={userData?.email}
+                avatarUrl={userData?.avatarUrl}
+                found={false}
+              />
+              <div className="divider" />
+              <li>
+                <ul className="menu bg-base-200 w-ful rounded-box">
+                  <li>
+                    <details>
+                      <summary className="">Theme</summary>
+                      <ThemeSwitcher />
+                    </details>
+                  </li>
+                  <li>
+                    <details>
+                      <summary>Language</summary>
+                      <ul>
+                        {languages.map((language) => (
+                          <li key={language.label}>
+                            <a>{language.value}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  </li>
+                  <div className="divider" />
+                  <li>
+                    <div onClick={logoutClick}>
+                      {logoutLoading ? (
+                        <div className="loading loading-spinner loading-xs text-base-content flex justify-center ml-2" />
+                      ) : (
+                        "Logout"
+                      )}
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </div>
-        </div> */}
+        </div>
+
+        <AddFriendModal id="addFriendModal" userData={userData} />
       </div>
     </div>
   );

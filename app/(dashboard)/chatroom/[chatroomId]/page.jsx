@@ -128,7 +128,6 @@ export default function ChatroomIdPage() {
         messagesContainerRef.current.scrollHeight;
     }
   }, [messagesContainerRef, messages]);
-  // }, [messages]);
 
   /* 
     Hide chat bubble loading skeleton after 3s 

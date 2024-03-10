@@ -74,7 +74,13 @@ export default function ChatList() {
   const size = useWindowSize();
   const searchTermRef = useRef(null);
   const supabase = useSupabaseClient();
-  const { setSelectedChatroom, mobile, toggleMobile } = useStore();
+  const {
+    setSelectedChatroom,
+    mobile,
+    toggleMobile,
+    userDataStore,
+    setUserDataStore,
+  } = useStore();
 
   const handleTabClick = (tab) => setActiveTab(tab);
 
@@ -89,12 +95,17 @@ export default function ChatList() {
 
     if (docSnap.exists()) {
       setUserData(docSnap.data());
+      setUserDataStore(docSnap.data());
     }
   };
 
   useEffect(() => {
     getUserData();
   }, []);
+
+  // useEffect(() => {
+  //   console.log('userData | ChatList: ', userData)
+  // }, [userData])
 
   /* 
     Get Users (Do not delete !!!)
@@ -115,12 +126,12 @@ export default function ChatList() {
   */
   useEffect(() => {
     // Do not delete this line !!!
-    if (!userData.id) return;
+    if (!userData?.id) return;
 
     // setChatListLoading(true);
     const chatroomsQuery = query(
       collection(firestore, "chatrooms"),
-      where("users", "array-contains", userData.id)
+      where("users", "array-contains", userData?.id)
       // orderBy("timestamp", "asc")
     );
     const unsubChatrooms = onSnapshot(chatroomsQuery, (snapshot) => {
@@ -291,19 +302,18 @@ export default function ChatList() {
           ? "flex w-screen"
           : size.width <= 800 && mobile
           ? "flex w-screen"
-          : size.width <= 800 && !mobile
+          : size.width <= 800 && !mobile 
           ? "hidden w-0"
           : "flex"
       }
-      h-screen
-    `}
+      `}
     >
       <Sidebar
         userData={userData}
         activeTab={activeTab}
-        handleTabClick={handleTabClick}
-        logoutClick={logoutClick}
         logoutLoading={logoutLoading}
+        logoutClick={logoutClick}
+        handleTabClick={handleTabClick}
       />
 
       <main
@@ -315,7 +325,7 @@ export default function ChatList() {
             ? "w-screen"
             : size.width <= 800 && !mobile
             ? "hidden w-0"
-            : "w-[300px] min-w-[200px]"
+            : "min-w-[300px]"
         }
         shadow-inner h-screen flex flex-col
       `}
@@ -336,33 +346,31 @@ export default function ChatList() {
           </div>
 
           {/* add-friend icon */}
-          <BsPersonAdd
+          {/* <BsPersonAdd
             className={`${
               activeTab == "privateChat" ? "block" : "hidden"
             } w-[23px] h-[23px] mx-2 hover:cursor-pointer text-base-content`}
             onClick={() =>
               document.getElementById("addFriendModal").showModal()
             }
-          />
+          /> */}
 
           {/* add-group icon */}
-          <MdGroupAdd
+          {/* <MdGroupAdd
             className={`${
               activeTab == "groupChat" ? "block" : "hidden"
             } w-[23px] h-[23px] mx-2 hover:cursor-pointer text-base-content`}
             onClick={() =>
               document.getElementById("createGroupModal").showModal()
             }
-          />
+          /> */}
 
           {/* avatar-icon with drawer wrapper */}
-          <div className="flex-none">
+          {/* <div className="flex-none">
             <div className="drawer z-[200]">
               <input
                 id="navbar-drawer-settings"
                 type="checkbox"
-                // value={drawerOpenState}
-                // onChange={handleDrawerState}
                 className="drawer-toggle"
               />
               <div className="flex justify-center">
@@ -380,8 +388,7 @@ export default function ChatList() {
                   aria-label="close sidebar"
                   className="drawer-overlay"
                 ></label>
-                <ul className="pt-4 w-80 min-h-full bg-base-200 text-base-content">
-                  {/* User Info */}
+                <ul className="pt-4 w-80 min-h-full bg-base-200 text-base-content">                 
                   <li className="pl-2 hidden mobile-show">
                     <a>
                       <UsersCard
@@ -428,7 +435,7 @@ export default function ChatList() {
                 </ul>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Body */}
@@ -456,7 +463,6 @@ export default function ChatList() {
                 ${isSearch ? "block" : "hidden"}
                 `}
             />
-            {/* ${mobile ? 'w-0 hidden' : 'w-full'} */}
             <IoCloseCircleOutline
               className={`
                 w-[22px] h-[22px] absolute top-[50%] translate-y-[-50%] right-3 hover:cursor-pointer
@@ -466,17 +472,18 @@ export default function ChatList() {
             />
           </div>
 
-          {activeTab === "groupChat" && (
+          {/* {activeTab === "groupChat" && (
             <div className="h-full flex flex-col items-center justify-center">
               <h1>Group Chat</h1>
             </div>
-          )}
+          )} */}
 
           {/*
             1. 如果讀取到聊天室資料, 停止加載, 並立即渲染聊天室UI
             2. 過了 5 秒後加載圖標會自動停止, 如果有讀取到聊天室資料, 渲染聊天室UI, 反之不做任何渲染 
           */}
-          {activeTab === "privateChat" && !chatListLoading && (
+          {/* {activeTab === "privateChat" && !chatListLoading && ( */}
+          {!chatListLoading && (
             <>
               {filteredChatrooms?.map((chatroom) => (
                 <div
@@ -516,7 +523,8 @@ export default function ChatList() {
           )}
 
           {/* 組件載入後立刻顯示加載圖示 */}
-          {activeTab === "privateChat" && chatListLoading && (
+          {/* {activeTab === "privateChat" && chatListLoading && ( */}
+          {chatListLoading && (
             <div className="py-3">
               {"abcd".split("").map((i) => (
                 <UsersCardSkeleton key={i} />
@@ -527,25 +535,26 @@ export default function ChatList() {
           {/* 
             經過 5 秒後停止加載圖標, 如果讀到的聊天室資料是空的, 印出 "您還沒有任何聊天室, 請加朋友聊天"
           */}
-          {activeTab === "privateChat" &&
-            userChatrooms.length === 0 &&
-            !chatListLoading && (
-              <div className="mt-10 px-3 flex flex-col items-center justify-center">
-                <img
-                  src="./begin_chat.svg"
-                  alt=""
-                  className="max-w-[100px] m-5"
-                />
-              </div>
-            )}
+          {/* {activeTab === "privateChat" && */}
+          {userChatrooms.length === 0 && !chatListLoading && (
+            <div className="mt-10 px-3 flex flex-col items-center justify-center">
+              <img
+                src="./begin_chat.svg"
+                alt=""
+                className="max-w-[100px] m-5"
+              />
+            </div>
+          )}
         </div>
 
-        {/* <BottomNavbar
+        <BottomNavbar
           userData={userData}
-          activeTab={activeTab}
-          handleTabClick={handleTabClick}
+          languages={languages}
+          // activeTab={activeTab}
+          // handleTabClick={handleTabClick}
+          logoutLoading={logoutLoading}
           logoutClick={logoutClick}
-        /> */}
+        />
       </main>
 
       <AddFriendModal

@@ -5,6 +5,9 @@ import "./globals.css";
 /* next */
 import { Inter } from "next/font/google";
 
+/* react */
+import { useState } from "react";
+
 /* react-toast */
 import { Toaster } from "react-hot-toast";
 
@@ -19,6 +22,11 @@ import { usePathname } from "next/navigation";
 
 /* hooks */
 import useWindowSize from "@/hooks/useWindowSize";
+import { useEffect } from "react";
+
+/* zustand */
+import { useStore } from "@/zustand/store";
+import { SignalZero } from "lucide-react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -57,19 +65,32 @@ export default function RootLayout({ children }) {
         </body>
       </html>
     );
-  } else {
+  }
+  if (path == "/" && size.width <= 800) {
     return (
       <html lang="en">
         <body className={`${inter.className}`} suppressHydrationWarning>
           <DaisyUIThemeProvider>
             <Toaster position="bottom-center" />
-            <div className="max-w-[1200px] mx-auto bg-base-200 flex">
-              <ChatList path={path} size={size} />
-              {children}
+            <div className="max-w-[1200px] mx-auto bg-base-200">
+              <ChatList />
             </div>
           </DaisyUIThemeProvider>
         </body>
       </html>
     );
   }
+  return (
+    <html lang="en">
+      <body className={`${inter.className}`} suppressHydrationWarning>
+        <DaisyUIThemeProvider>
+          <Toaster position="bottom-center" />
+          <div className="max-w-[1100px] mx-auto bg-base-200 flex">
+            <ChatList />
+            {children}
+          </div>
+        </DaisyUIThemeProvider>
+      </body>
+    </html>
+  );
 }

@@ -9,6 +9,9 @@ import { IoIosSearch } from "react-icons/io";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
+/* zustand */
+import { useStore } from "@/zustand/store";
+
 /* firebase */
 import { firestore } from "@/lib/firebase/client";
 import {
@@ -35,11 +38,18 @@ import { toast } from "react-hot-toast";
 
 export default function AddFriendModal({ id, userData, setActiveTab }) {
   const [userInfo, setUserInfo] = useState("");
-  const [foundUsers, setFoundUsers] = useState("");
+  const [foundUsers, setFoundUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [createChatLoading, setCreateChatLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [isErrorMsg, setIsErrorMsg] = useState(false);
+  const {
+    setSelectedChatroom,
+    mobile,
+    toggleMobile,
+    userDataStore,
+    setUserDataStore,
+  } = useStore();
 
   const userInfoRef = useRef(null);
 
@@ -47,12 +57,13 @@ export default function AddFriendModal({ id, userData, setActiveTab }) {
     userInfoRef.current.focus();
   }, [userInfo]);
 
-  const createChat = async (user, usersLength) => {
-    // const createChat = async (user) => {
-    if (user.email === userData.email) {
-      setIsErrorMsg(true);
+  const createChat = async (user) => {
+    if (user.email === userDataStore?.email) {
       setErrorMsg(`You cannot add yourself 😅`);
-      // toast(`You cannot add yourself !`, { icon: "😅" });
+      toast(`You cannot add yourself !`, {
+        icon: "😅",
+        position: "bottom-right",
+      });
       return;
     }
     setCreateChatLoading(true);
@@ -61,48 +72,37 @@ export default function AddFriendModal({ id, userData, setActiveTab }) {
     const existingChatroomsQuery = query(
       collection(firestore, "chatrooms"),
       where("users", "in", [
-        [userData.id, user.id],
-        [user.id, userData.id],
+        [userDataStore?.id, user.id],
+        [user.id, userDataStore?.id],
       ])
     );
 
     try {
       const existingChatroomsSnapshot = await getDocs(existingChatroomsQuery);
-
       if (existingChatroomsSnapshot.docs.length > 0) {
-        if (usersLength > 1) {
-          // setCreateChatLoading(false);
-          setIsErrorMsg(true);
-          setErrorMsg(`${user.name} is already in your chat list 😎`);
-          // toast(
-          //   `${user.name} is already in your chat list`,
-          //   { icon: "😎" }
-          // );
-        } else {
-          // setLoading(false);
-          // setCreateChatLoading(false);
-          setIsErrorMsg(true);
-          setErrorMsg(`${user.name} is already in your chat list 😎`);
-          // toast(`${user.name} is already in your chat list`, { icon: "😎" });
-        }
-
+        toast(`${user.name} is already in your chat list`, {
+          icon: "😎",
+          position: "bottom-right",
+        });
         setCreateChatLoading(false);
         return;
       }
 
       const usersData = {
-        [userData.id]: userData,
+        [userDataStore?.id]: userDataStore,
         [user.id]: user,
-        uD4d3fzZKMQN5wzMFfnL5ivJ1VL2: {
-          avatarUrl: 'https://avataaars.io/?accessoriesType=Round&avatarStyle=Circle&clotheColor=PastelBlue&clotheType=Overall&eyeType=Cry&eyebrowType=SadConcernedNatural&facialHairColor=BlondeGolden&facialHairType=MoustacheFancy&hairColor=Auburn&hatColor=PastelOrange&mouthType=Sad&skinColor=Tanned&topType=Eyepatch',
-          email: 'pirateman@gmail.com',
-          id: 'uD4d3fzZKMQN5wzMFfnL5ivJ1VL2',
-          name: 'pirateman'
-        }
+        // uD4d3fzZKMQN5wzMFfnL5ivJ1VL2: {
+        //   avatarUrl:
+        //     "https://avataaars.io/?accessoriesType=Round&avatarStyle=Circle&clotheColor=PastelBlue&clotheType=Overall&eyeType=Cry&eyebrowType=SadConcernedNatural&facialHairColor=BlondeGolden&facialHairType=MoustacheFancy&hairColor=Auburn&hatColor=PastelOrange&mouthType=Sad&skinColor=Tanned&topType=Eyepatch",
+        //   email: "pirateman@gmail.com",
+        //   id: "uD4d3fzZKMQN5wzMFfnL5ivJ1VL2",
+        //   name: "pirateman",
+        // },
       };
 
       const chatroomData = {
-        users: [userData.id, user.id, 'uD4d3fzZKMQN5wzMFfnL5ivJ1VL2'],
+        // users: [userDataStore?.id, user.id, "uD4d3fzZKMQN5wzMFfnL5ivJ1VL2"],
+        users: [userDataStore?.id, user.id],
         usersData,
         timestamp: serverTimestamp(),
         lastMessage: null,
@@ -129,7 +129,7 @@ export default function AddFriendModal({ id, userData, setActiveTab }) {
     setLoading(true);
     const q = query(
       collection(firestore, "users"),
-      or(where("name", "==", userInfo), where("email", "==", userInfo))
+      or(where("name", "==", userInfo.toLowerCase()), where("email", "==", userInfo.toLowerCase()))
     );
     const users = [];
     const querySnapshot = await getDocs(q);
@@ -237,15 +237,11 @@ export default function AddFriendModal({ id, userData, setActiveTab }) {
 
         {/* search results */}
         <div className="relative mt-8 flex flex-col">
-          {/* {loading && <UsersCardSkeleton />} */}
-
           {!loading &&
-            // foundUsers.length > 1 &&
             foundUsers &&
             foundUsers.map((user, index, arr) => (
-              <div>
+              <div key={user.id}>
                 <div
-                  key={user.id}
                   className={`relative mb-[0px] shadow-m border- border-blue-30
                   ${createChatLoading ? "btn-disabled" : ""}
                   `}
@@ -260,13 +256,13 @@ export default function AddFriendModal({ id, userData, setActiveTab }) {
                   <span
                     className={`${
                       createChatLoading ? "block" : "hidden"
-                    } loading loading-spinner loading-sm text-base-content absolute right-3 top-0`}
+                    } loading loading-spinner loading-sm text-base-content absolute right-3 top-[50%] translate-y-[-50%]`}
                   />
                   <IoIosAddCircleOutline
                     className={`${
                       createChatLoading ? "hidden" : "block"
-                    } w-6 h-6 text-base-content absolute right-3 top-0 hover:cursor-pointer`}
-                    onClick={() => createChat(user, foundUsers.length)}
+                    } w-6 h-6 text-base-content absolute right-3 top-[50%] translate-y-[-50%] hover:cursor-pointer`}
+                    onClick={() => createChat(user)}
                   />
                 </div>
                 {/* render divider between found users if multiple users found but not on the last one */}
