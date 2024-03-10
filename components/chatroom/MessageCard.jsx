@@ -73,16 +73,12 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
                 ? "chat-bubble chat-bubble-accent"
                 : "chat-bubble chat-bubble-primary"
             } 
-            flex items-center
+            flex items-center justify-center
           `}
         >
-          {message.image && (
-            <div className="flex justify-center">
-              <img src={message.image} className="max-h-60 mb- rounded" />
-            </div>
-          )}
+          <img src={message.image} className="max-h-60 mb- rounded" />
           <p
-            className={`text-wrap leading-tight min-w-[60px] ${
+            className={`text-wrap leading-tight min-w-[px] ${
               isMessageFromMe ? "text-accent-content" : "text-primary-content"
             }`}
           >
@@ -98,14 +94,14 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
             {formatTimeAgo(message.time)}
           </div> */}
         </div>
-        <div className="chat-footer opacity-50">Seen</div>
+        <div className="chat-footer opacity-50 ml-1">Seen</div>
 
         {/* Delete Menu */}
         <div className="delete-menu">
           <CiMenuKebab
             className={`
             ${isMessageFromMe ? "right-[-8px] top-4" : "hidden"} 
-            absolute w-5 h-5 hover:cursor-pointer text-warning
+            absolute w-5 h-5 hover:cursor-pointer text-warning opacity-50
           `}
             onClick={() => setDeleteMsgMenu(!deleteMsgMenu)}
           />
