@@ -57,39 +57,25 @@ export default function BottomNavbar({
   return (
     <div className="mt-auto hidden users-mobile">
       <div className="btm-na h-14 w-full flex bg-base-200 shadow-inner">
-        {/* Add Friend */}
-        {/* ${activeTab == "groupChat" ? "menu-top-active text-base-content" : ""} */}
         <button
-          className={`
-           w-1/2 flex flex-col justify-center items-center
-           
-          `}
+          className={`w-1/2 flex flex-col justify-center items-center`}
         >
           <BsPersonAdd
             className={`w-[23px] h-[23px] font-bold text-base-content`}
-            onClick={handleAddFriend}
-            // onClick={() =>
-            //   document.getElementById("addFriendModal").showModal()
-            // }
+            onClick={() =>
+              document.getElementById("addFriendModalBottomNav").showModal()
+            }
           />
           <span className="btm-nav-label text-xs">Add Friend</span>
         </button>
 
-        {/* Create Group */}
-        {/* ${activeTab == "groupChat" ? "menu-top-active text-base-content" : ""} */}
         <button
           className={`
             w-1/2 flex flex-col justify-center items-center            
           `}
         >
-          {/* <Link href="/createGroup"> */}
-          <AiOutlineUsergroupAdd
-            className="w-[24px] h-[24px] font-bold text-base-content "
-            // onClick={toggleMobile}
-            onClick={handleCreateGroup}
-          />
+          <AiOutlineUsergroupAdd className="w-[24px] h-[24px] font-bold text-base-content" />
           <span className="btm-nav-label text-xs">Create Group</span>
-          {/* </Link> */}
         </button>
 
         {/* user avatar */}
@@ -165,7 +151,7 @@ export default function BottomNavbar({
           </div>
         </div> */}
 
-        <AddFriendModal id="addFriendModal" userData={userData} />
+        <AddFriendModal id="addFriendModalBottomNav" userData={userData} />
       </div>
     </div>
   );

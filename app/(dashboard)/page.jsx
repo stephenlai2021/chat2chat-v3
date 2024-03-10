@@ -11,7 +11,7 @@ export default function DashoardPage() {
       className={`
         ${
           size.width <= 800
-            ? "w-0 h-0 hidden overflow-hidden"
+            ? "hidden w-0"
             : "w-full shadow-inner h-screen flex flex-col items-center justify-center"
         }
         

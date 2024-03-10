@@ -52,31 +52,32 @@ export default function RootLayout({ children }) {
   const path = usePathname();
   const size = useWindowSize();
 
-  // if (path == "/login" || path == "/register") {
-  //   return (
-  //     <html lang="en">
-  //       <body className={`${inter.className}`} suppressHydrationWarning>
-  //         <DaisyUIThemeProvider>
-  //           <Toaster position="bottom-center" />
-  //           <div className="max-w-[1200px] mx-auto bg-base-200 flex">
-  //             {children}
-  //           </div>
-  //         </DaisyUIThemeProvider>
-  //       </body>
-  //     </html>
-  //   );
-  // }
-  return (
-    <html lang="en">
-      <body className={`${inter.className}`} suppressHydrationWarning>
-        <DaisyUIThemeProvider>
-          <Toaster position="bottom-center" />
-          <div className="max-w-[1100px] mx-auto bg-base-200 flex">
-            <ChatList />
-            {children}
-          </div>
-        </DaisyUIThemeProvider>
-      </body>
-    </html>
-  );
+  if (path == "/login" || path == "/register") {
+    return (
+      <html lang="en">
+        <body className={`${inter.className}`} suppressHydrationWarning>
+          <DaisyUIThemeProvider>
+            <Toaster position="bottom-center" />
+            <div className="max-w-[1200px] mx-auto bg-base-200 flex">
+              {children}
+            </div>
+          </DaisyUIThemeProvider>
+        </body>
+      </html>
+    );
+  } else {
+    return (
+      <html lang="en">
+        <body className={`${inter.className}`} suppressHydrationWarning>
+          <DaisyUIThemeProvider>
+            <Toaster position="bottom-center" />
+            <div className="max-w-[1100px] mx-auto bg-base-200 flex">
+              <ChatList />
+              {children}
+            </div>
+          </DaisyUIThemeProvider>
+        </body>
+      </html>
+    );
+  }
 }

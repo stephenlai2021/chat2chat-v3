@@ -59,10 +59,10 @@ export default function AddFriendModal({ id, userData, setActiveTab }) {
 
   const createChat = async (user) => {
     if (user.email === userDataStore?.email) {
-      setErrorMsg(`You cannot add yourself 😅`);
+      // setErrorMsg(`You cannot add yourself 😅`);
       toast(`You cannot add yourself !`, {
         icon: "😅",
-        position: "bottom-right",
+        position: "bottom-center",
       });
       return;
     }
@@ -82,7 +82,7 @@ export default function AddFriendModal({ id, userData, setActiveTab }) {
       if (existingChatroomsSnapshot.docs.length > 0) {
         toast(`${user.name} is already in your chat list`, {
           icon: "😎",
-          position: "bottom-right",
+          position: "bottom-center",
         });
         setCreateChatLoading(false);
         return;
@@ -129,7 +129,10 @@ export default function AddFriendModal({ id, userData, setActiveTab }) {
     setLoading(true);
     const q = query(
       collection(firestore, "users"),
-      or(where("name", "==", userInfo.toLowerCase()), where("email", "==", userInfo.toLowerCase()))
+      or(
+        where("name", "==", userInfo.toLowerCase()),
+        where("email", "==", userInfo.toLowerCase())
+      )
     );
     const users = [];
     const querySnapshot = await getDocs(q);
@@ -140,13 +143,13 @@ export default function AddFriendModal({ id, userData, setActiveTab }) {
     setLoading(false);
 
     if (users.length == 0) {
-      setIsErrorMsg(true);
-      setErrorMsg("This user is not existed 🤔");
-      // toast("This user is not existed !", { icon: "🤔" });
+      // setIsErrorMsg(true);
+      // setErrorMsg("This user is not existed 🤔");
+      toast("This user is not existed !", {
+        icon: "🤔",
+        position: "bottom-center",
+      });
     }
-
-    // if (users.length == 1) users.forEach((user) => createChat(user));
-    // if (users.length > 1) setLoading(false);
   };
 
   const resestAddFriendInfo = () => {

@@ -42,6 +42,7 @@ import BrandTitle from "./BrandTitle";
 import ThemeSwitcher from "../switcher/ThemeSwitcher";
 
 /* react-icons */
+import { RxAvatar } from "react-icons/rx";
 import { BsPersonAdd } from "react-icons/bs";
 import { MdGroupAdd } from "react-icons/md";
 import { IoIosSearch } from "react-icons/io";
@@ -297,23 +298,21 @@ export default function ChatList() {
   return (
     <div
       className={`
-      ${
-        size.width <= 800 && path == "/"
-          ? "flex w-screen"
-          : size.width <= 800 && mobile
-          ? "flex w-screen"
-          : size.width <= 800 && !mobile
-          ? "hidden w-0"
-          : "flex"
-      }
+        ${
+          size.width <= 800 && path == "/"
+            ? "flex w-screen"
+            : size.width <= 800 && mobile
+            ? "flex w-screen"
+            : size.width <= 800 && !mobile
+            ? "hidden w-0"
+            : "flex"
+        }      
       `}
     >
       <Sidebar
         userData={userData}
-        // activeTab={activeTab}
-        // logoutLoading={logoutLoading}
-        // logoutClick={logoutClick}
-        // handleTabClick={handleTabClick}
+        logoutClick={logoutClick}
+        logoutLoading={logoutLoading}
       />
 
       <main
@@ -335,10 +334,13 @@ export default function ChatList() {
           <BrandTitle />
 
           {/* search icon */}
-          <div className="relative">
+          <div
+            className="relative tooltip tooltip-bottom"
+            data-tip="Search friend"
+          >
             <IoIosSearch
               className={`
-                w-[23px] h-[23px] mx-2 hover:cursor-pointer text-base-content
+                w-[22px] h-[22px] mx-2 hover:cursor-pointer text-base-content
                 ${isSearch ? "hidden" : "block"}
               `}
               onClick={() => setIsSearch((current) => !current)}
@@ -351,7 +353,7 @@ export default function ChatList() {
               activeTab == "privateChat" ? "block" : "hidden"
             } w-[23px] h-[23px] mx-2 hover:cursor-pointer text-base-content`}
             onClick={() =>
-              document.getElementById("addFriendModal").showModal()
+              document.getElementById("addFriendModalChatList").showModal()
             }
           /> */}
 
@@ -373,13 +375,17 @@ export default function ChatList() {
                 type="checkbox"
                 className="drawer-toggle"
               />
-              <div className="flex justify-center">
+              <div
+                className="flex justify-center tooltip tooltip-bottom"
+                data-tip="Settings"
+              >
                 <label
                   htmlFor="navbar-drawer-settings"
                   aria-label="close sidebar"
                   className="mx-2 py-2"
                 >
-                  <IoSettingsOutline className="w-[23px] h-[23px] hover:cursor-pointer text-base-content" />
+                  {/* <IoSettingsOutline className="w-[23px] h-[23px] hover:cursor-pointer text-base-content" /> */}
+                  <RxAvatar className="w-[23px] h-[23px] hover:cursor-pointer text-base-content" />
                 </label>
               </div>
               <div className="drawer-side">
@@ -420,7 +426,7 @@ export default function ChatList() {
                       <li>
                         <div onClick={logoutClick}>
                           {logoutLoading ? (
-                            <div className="loading loading-spinner loading-xs text-base-content flex justify-center ml-2" />
+                            <div className="loading loading-spinner loading-xs opacity-30 text-base-content flex justify-center ml-2" />
                           ) : (
                             "Logout"
                           )}
@@ -546,17 +552,15 @@ export default function ChatList() {
         <BottomNavbar
           userData={userData}
           languages={languages}
-          // activeTab={activeTab}
-          // handleTabClick={handleTabClick}
           logoutLoading={logoutLoading}
           logoutClick={logoutClick}
         />
       </main>
 
       <AddFriendModal
-        id="addFriendModal"
+        id="addFriendModalChatList"
         userData={userData}
-        setActiveTab={setActiveTab}
+        // setActiveTab={setActiveTab}
       />
 
       <CreateGroupModal id="createGroupModal" />

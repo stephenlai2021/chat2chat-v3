@@ -3,6 +3,7 @@
 /* components */
 import UsersCard from "./UsersCard";
 import ThemeSwitcher from "../switcher/ThemeSwitcher";
+import AddFriendModal from "../modal/AddFriendModal";
 
 /* next */
 import { useRouter } from "next/navigation";
@@ -17,6 +18,7 @@ import { GrGroup } from "react-icons/gr";
 import { MdGroupAdd } from "react-icons/md";
 import { BsPersonAdd } from "react-icons/bs";
 import { IoSettingsOutline } from "react-icons/io5";
+import { RiLogoutCircleRLine } from "react-icons/ri";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 
 export default function Sidabar({
@@ -74,41 +76,48 @@ export default function Sidabar({
       <div
         className={`
           w-full mt-2 py- px-5 flex items-center justify-center
-          hover:tooltip hover:tooltip-bottom
+          tooltip tooltip-bottom
           border- border-red-30
         `}
         data-tip="Add Friend"
       >
         <BsPersonAdd
           className={`w-[23px] h-[23px] hover:cursor-pointer text-base-content`}
-          // onClick={() => router.push("/chatroom/addfriend")}
-          onClick={handleAddFriend}
+          onClick={() => document.getElementById("addFriendModal").showModal()}
         />
       </div>
 
       <div
         className={`
           w-full mt-8 py- px-5 flex items-center justify-center
-          hover:tooltip hover:tooltip-bottom
+          tooltip tooltip-bottom
           border- border-red-30
         `}
         data-tip="Create Group"
       >
         <AiOutlineUsergroupAdd
           className={`w-[23px] h-[23px] hover:cursor-pointer text-base-content`}
-          // onClick={() => router.push("/chatroom/creategroup")}
-          onClick={handleCreateGroup}
         />
       </div>
 
-      {/* Avatar icon */}
-      <div className="mt-auto mb-3">
-        <RxAvatar
-          className="w-[24px] h-[24px] hover:cursor-pointer text-base-content"
-          onClick={() => document.getElementById("user-info-modal").showModal()}
+      {/* Logout icon */}
+      <div className="mt-auto mb-4 tooltip tooltip-top" data-tip="Logout">
+        <div  
+          className={`
+            loading loading-spinner loading-xs text-base-content flex justify-center ml-2 opacity-30
+            ${logoutLoading ? "block" : "hidden"}
+          `}
+        />
+        <RiLogoutCircleRLine
+          className={`
+            w-[20px] h-[20px] hover:cursor-pointer text-base-content
+            ${logoutLoading ? "hidden" : "block"}
+          `}
+          onClick={logoutClick}
         />
       </div>
 
+      {/* Avatar Icon */}
       {/* <div className="flex-none mt-auto mb-3">
         <div className="drawer z-[200]">
           <input
@@ -177,7 +186,7 @@ export default function Sidabar({
       </div> */}
 
       {/* User Info Modal */}
-      <dialog id="user-info-modal" className="modal">
+      {/* <dialog id="user-info-modal" className="modal">
         <div className="modal-box">
           <UsersCard
             name={userData?.name}
@@ -189,7 +198,12 @@ export default function Sidabar({
         <form method="dialog" className="modal-backdrop">
           <button>close</button>
         </form>
-      </dialog>
+      </dialog> */}
+
+      <AddFriendModal
+        id="addFriendModal"
+        userData={userData}
+      />
     </div>
   );
 }
