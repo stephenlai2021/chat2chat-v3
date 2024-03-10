@@ -66,20 +66,20 @@ export default function RootLayout({ children }) {
       </html>
     );
   }
-  if (path == "/" && size.width <= 800) {
-    return (
-      <html lang="en">
-        <body className={`${inter.className}`} suppressHydrationWarning>
-          <DaisyUIThemeProvider>
-            <Toaster position="bottom-center" />
-            <div className="max-w-[1200px] mx-auto bg-base-200">
-              <ChatList />
-            </div>
-          </DaisyUIThemeProvider>
-        </body>
-      </html>
-    );
-  }
+  // if (path == "/" && size.width <= 800) {
+  //   return (
+  //     <html lang="en">
+  //       <body className={`${inter.className}`} suppressHydrationWarning>
+  //         <DaisyUIThemeProvider>
+  //           <Toaster position="bottom-center" />
+  //           <div className="max-w-[1200px] mx-auto bg-base-200">
+  //             <ChatList />
+  //           </div>
+  //         </DaisyUIThemeProvider>
+  //       </body>
+  //     </html>
+  //   );
+  // }
   return (
     <html lang="en">
       <body className={`${inter.className}`} suppressHydrationWarning>
