@@ -307,7 +307,7 @@ export default function ChatList() {
             ? "w-screen"
             : ""
         } flex      
-      `} 
+      `}
     >
       <Sidebar
         userData={userData}
@@ -335,7 +335,7 @@ export default function ChatList() {
           {/* search icon */}
           <div
             className={`
-              ${size.width > 800 ? 'tooltip tooltip-bottom' : ''}
+              ${size.width > 800 ? "tooltip tooltip-bottom" : ""}
               relative 
             `}
             data-tip="Search friend"
@@ -379,7 +379,7 @@ export default function ChatList() {
               />
               <div
                 className={`
-                  ${size.width > 800 ? 'tooltip tooltip-bottom' : ''}
+                  ${size.width > 800 ? "tooltip tooltip-bottom" : ""}
                   flex justify-center 
                 `}
                 data-tip="Settings"
@@ -427,16 +427,20 @@ export default function ChatList() {
                           </ul>
                         </details>
                       </li>
-                      <div className="divider" />
-                      <li>
-                        <div onClick={logoutClick}>
-                          {logoutLoading ? (
-                            <div className="loading loading-spinner loading-xs opacity-30 text-base-content flex justify-center ml-2" />
-                          ) : (
-                            "Logout"
-                          )}
-                        </div>
-                      </li>
+                      {size.width <= 800 && (
+                        <>
+                          <div className="divider" />
+                          <li>
+                            <div onClick={logoutClick}>
+                              {logoutLoading ? (
+                                <div className="loading loading-spinner loading-xs opacity-30 text-base-content flex justify-center ml-2" />
+                              ) : (
+                                "Logout"
+                              )}
+                            </div>
+                          </li>
+                        </>
+                      )}
                     </ul>
                   </li>
                 </ul>
@@ -446,10 +450,12 @@ export default function ChatList() {
         </div>
 
         {/* Body */}
-        <div className={`
-          ${size.width <= 800 ? 'mb-[56px]' : ''}
+        <div
+          className={`
+          ${size.width <= 800 ? "mb-[56px]" : ""}
           overflow-y-auto shadow-inner
-        `}>
+        `}
+        >
           {/* search input */}
           <div
             className={`relative flex justify-center mx-3
@@ -558,13 +564,9 @@ export default function ChatList() {
           logoutLoading={logoutLoading}
           logoutClick={logoutClick}
         />
-
       </main>
 
-      <AddFriendModal
-        id="addFriendModalChatList"
-        userData={userData}
-      />
+      <AddFriendModal id="addFriendModalChatList" userData={userData} />
 
       <CreateGroupModal id="createGroupModal" />
     </div>
