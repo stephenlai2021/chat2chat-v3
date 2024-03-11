@@ -71,7 +71,7 @@ export default function RootLayout({ children }) {
         <body className={`${inter.className}`} suppressHydrationWarning>
           <DaisyUIThemeProvider>
             <Toaster position="bottom-center" />
-            <div className="max-w-[1100px] mx-auto bg-base-200 flex">
+            <div className="max-w-[1100px] mx-auto bg-base-200 flex overflow-hidden">
               <ChatList />
               {children}
             </div>

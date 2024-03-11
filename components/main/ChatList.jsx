@@ -300,14 +300,14 @@ export default function ChatList() {
       className={`
         ${
           size.width <= 800 && path == "/"
-            ? "flex w-screen"
-            : size.width <= 800 && mobile
-            ? "flex w-screen"
+            ? "w-screen"
             : size.width <= 800 && !mobile
-            ? "hidden w-0"
-            : "flex"
-        }      
-      `}
+            ? "hidden w-0 h-0"
+            : size.width <= 800 && mobile
+            ? "w-screen"
+            : ""
+        } flex      
+      `} 
     >
       <Sidebar
         userData={userData}
@@ -317,16 +317,15 @@ export default function ChatList() {
 
       <main
         className={`
-        ${
-          size.width <= 800 && path == "/"
-            ? "flex w-screen"
-            : size.width <= 800 && mobile
-            ? "w-screen"
-            : size.width <= 800 && !mobile
-            ? "hidden w-0"
-            : "min-w-[300px]"
-        }
-        shadow-inner h-screen flex flex-col
+          ${
+            size.width <= 800 && path == "/"
+              ? "w-screen"
+              : size.width <= 800 && !mobile
+              ? "hidden"
+              : size.width <= 800 && mobile
+              ? "w-screen"
+              : "min-w-[300px]"
+          } shadow-inner h-screen flex flex-col
       `}
       >
         {/* Navbar */}
@@ -335,7 +334,10 @@ export default function ChatList() {
 
           {/* search icon */}
           <div
-            className="relative tooltip tooltip-bottom"
+            className={`
+              ${size.width > 800 ? 'tooltip tooltip-bottom' : ''}
+              relative 
+            `}
             data-tip="Search friend"
           >
             <IoIosSearch
@@ -376,7 +378,10 @@ export default function ChatList() {
                 className="drawer-toggle"
               />
               <div
-                className="flex justify-center tooltip tooltip-bottom"
+                className={`
+                  ${size.width > 800 ? 'tooltip tooltip-bottom' : ''}
+                  flex justify-center 
+                `}
                 data-tip="Settings"
               >
                 <label
@@ -441,12 +446,10 @@ export default function ChatList() {
         </div>
 
         {/* Body */}
-        <div
-          className={`
-            ${size.width <= 800 ? "mb-[56px]" : ""}
-            overflow-y-auto overflow-x-hidden h-full shadow-inner
-          `}
-        >
+        <div className={`
+          ${size.width <= 800 ? 'mb-[56px]' : ''}
+          overflow-y-auto shadow-inner
+        `}>
           {/* search input */}
           <div
             className={`relative flex justify-center mx-3
@@ -555,12 +558,12 @@ export default function ChatList() {
           logoutLoading={logoutLoading}
           logoutClick={logoutClick}
         />
+
       </main>
 
       <AddFriendModal
         id="addFriendModalChatList"
         userData={userData}
-        // setActiveTab={setActiveTab}
       />
 
       <CreateGroupModal id="createGroupModal" />

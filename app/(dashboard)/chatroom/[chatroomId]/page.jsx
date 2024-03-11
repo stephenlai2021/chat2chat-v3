@@ -209,7 +209,7 @@ export default function ChatroomIdPage() {
           size.width <= 800 && !mobile
             ? "w-screen"
             : size.width <= 800 && mobile
-            ? "hidden w-0"
+            ? "hidden"
             : "w-full"
         }
       `}

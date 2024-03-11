@@ -13,8 +13,7 @@ export default function DashoardPage() {
           size.width <= 800
             ? "hidden w-0"
             : "w-full shadow-inner h-screen flex flex-col items-center justify-center"
-        }
-        
+        }        
       `}
     >
       <img
