@@ -108,7 +108,7 @@ export default function Sidabar({
       >
         <AiOutlineUsergroupAdd
           className={`w-[23px] h-[23px] hover:cursor-pointer text-base-content`}
-          onClick={handleAddFriend}
+          // onClick={handleAddFriend}
         />
       </div>
 

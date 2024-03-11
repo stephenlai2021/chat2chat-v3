@@ -94,7 +94,7 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
             {formatTimeAgo(message.time)}
           </div> */}
         </div>
-        <div className="chat-footer opacity-50 ml-1">Seen</div>
+        <div className="chat-footer opacity-50 ml-1 text-xs">Seen</div>
 
         {/* Delete Menu */}
         <div className="delete-menu">

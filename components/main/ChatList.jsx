@@ -251,8 +251,8 @@ export default function ChatList() {
     };
 
     toggleMobile();
-    setSelectedChatroom(data);
     /* save chatroom in store */
+    setSelectedChatroom(data);
     router.push(`/chatroom/${chatroom.id}`);
 
     // const tempData = data.otherData;

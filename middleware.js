@@ -84,7 +84,7 @@ export async function middleware(request) {
 		}
 		return response;
 	} else {
-    if (url.pathname === "/") {
+    if (url.pathname === "/" || url.pathname.includes("/chatroom/")) {
 			return NextResponse.redirect(new URL("/login", request.url));
 		}
 		return response;
