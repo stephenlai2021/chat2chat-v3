@@ -21,6 +21,9 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 
+/* zustand */
+import { useStore } from "@/zustand/store";
+
 export default function Sidabar({
   userData,
   activeTab,
@@ -29,6 +32,14 @@ export default function Sidabar({
   logoutLoading,
 }) {
   const router = useRouter();
+  const {
+    setSelectedChatroom,
+    mobile,
+    toggleMobile,
+    userDataStore,
+    setUserDataStore,
+  } = useStore();
+
 
   const handleAddFriend = () => {
     router.push("/addfriend");
@@ -97,6 +108,7 @@ export default function Sidabar({
       >
         <AiOutlineUsergroupAdd
           className={`w-[23px] h-[23px] hover:cursor-pointer text-base-content`}
+          onClick={handleAddFriend}
         />
       </div>
 
