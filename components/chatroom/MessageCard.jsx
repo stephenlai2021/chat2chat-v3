@@ -73,14 +73,16 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
                 ? "chat-bubble chat-bubble-accent"
                 : "chat-bubble chat-bubble-primary"
             } 
-            flex items-center justify-center
+            flex flex-col items-center justify-center
           `}
         >
           <img src={message.image} className="max-h-60 mb- rounded" />
           <p
-            className={`text-wrap leading-tight min-w-[px] ${
-              isMessageFromMe ? "text-accent-content" : "text-primary-content"
-            }`}
+            className={`
+              text-wrap leading-tight min-w-[px] text-sm border- border-red-30 w-full
+              ${isMessageFromMe ? "text-accent-content" : "text-primary-content"}
+              ${message.image ? 'mt-2' : 'flex justify-start'}
+            `}
           >
             {message.content}
           </p>
