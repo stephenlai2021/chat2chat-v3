@@ -450,9 +450,9 @@ export default function ChatList() {
         </div>
 
         {/* Body */}
+        {/* ${size.width <= 800 ? "mb-[56px]" : ""} */}
         <div
           className={`
-          ${size.width <= 800 ? "mb-[56px]" : ""}
           overflow-y-auto shadow-inner
         `}
         >
