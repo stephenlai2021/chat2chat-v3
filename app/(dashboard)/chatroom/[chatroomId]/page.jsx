@@ -94,10 +94,18 @@ export default function ChatroomIdPage() {
 
   // Format: 03/12/2024
   const formatDate = (timestamp) => {
-    const date = timestamp.toDate();
+    const date = timestamp?.toDate();
     const momentDate = moment(date);
     return momentDate.format("l");
   };
+
+  // 2:21PM
+  const formatTimeClock = (timestamp) => {
+    const date = timestamp?.toDate();
+    const momentDate = moment(date);
+    return momentDate.format("LT");
+  };
+
 
   /* 
     put messages in db 
@@ -240,7 +248,7 @@ export default function ChatroomIdPage() {
   return (
     <div
       className={`
-        flex flex-col h-screen shadow-inner
+        flex flex-col h-screen shadow-inner overflow-x-hidden
         ${
           size.width <= 800 && !mobile
             ? "w-screen"

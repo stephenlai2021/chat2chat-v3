@@ -90,9 +90,10 @@
   border-top-width: 2px;
 }
 
-/* .img-bg {
-  background-image: url('avatar.png');
-} */
+.string-break {
+  max-width: 250px;
+  word-break:break-all;
+}
 
 @media (min-width: 800px) {  
   .text-desktop {

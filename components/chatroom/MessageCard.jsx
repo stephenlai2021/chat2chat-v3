@@ -58,7 +58,7 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
 
   return (
     <div>
-      <div className="divide flex justify-center text-xs opacity-50">
+      <div className="divide flex justify-center text-xs opacity-50 overflow-x-hidden">
         {formatDate(message.time) == getCurrentDate()
           ? "Today"
           : formatDate(message.time) == getYesterday()
@@ -66,10 +66,9 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
           : formatDate(message.time).substring(
               0,
               formatDate(message.time).length - 5
-              )
-          // : moment(message?.time.toDate()).format("MMM Do")
-        }
+            )}
       </div>
+      {/* : moment(message?.time.toDate()).format("MMM Do") */}
       <div
         key={message.id}
         className={`
@@ -98,8 +97,7 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
         )}
       </div> */}
 
-        {/* chat bubble */}
-        <div className="relative">
+        <div className="relative string-break">
           <div
             className={`
               chat-header flex ml-1
@@ -116,17 +114,20 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
                 ? "chat-bubble chat-bubble-accent"
                 : "chat-bubble chat-bubble-primary"
             } 
-            flex flex-col items-center justify-center
+            flex flex-col items-center justify-center border- border-green-30                      
+            string-break
           `}
           >
-            <img src={message.image} className="max-h-60 mb- rounded" />
+            <img src={message.image} className="max-h-60 rounded" />
             <p
               className={`
-              text-wrap leading-tight min-w-[px] text-sm w-full pr-4
-              ${
-                isMessageFromMe ? "text-accent-content" : "text-primary-content"
-              }
-              ${message.image ? "mt-2" : "flex justify-start"}
+                leading-tight string-break text-sm border- border-red-30
+                ${
+                  isMessageFromMe
+                    ? "text-accent-content"
+                    : "text-primary-content"
+                }
+                ${message.image ? "mt-2" : "flex justify-start"}             
             `}
             >
               {message.content}
