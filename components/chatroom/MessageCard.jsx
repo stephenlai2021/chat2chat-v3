@@ -56,7 +56,7 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
 
   return (
     <>
-      <div className="divide flex justify-center text-xs opacity-50 overflow-x-hidde">
+      <div className="divide flex justify-center my-2 text-xs opacity-50 overflow-x-hidde">
         {formatDate(message.time) == getCurrentDate()
           ? "Today"
           : formatDate(message.time) == getYesterday()
@@ -76,7 +76,7 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
         `}
       >
         <div className="chat-image avatar">
-          <div className="w-10 rounded-full">
+          <div className="w-10 rounded-full bg-[url('/avatar.png')]">
             <img
               src={isMessageFromMe ? me.avatarUrl : other.avatarUrl}
               alt="Avatar"
@@ -132,13 +132,13 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
             role="button"
             className={`
               ${isMessageFromMe ? "left-[-20px]" : "hidden"} 
-              absolute left-[-55px] top-[-45px] z-[100] w-5 h-5 hover:cursor-pointer text-warning opacity-50
+              absolute left-[-55px] top-[-45px] w-5 h-5 hover:cursor-pointer text-warning opacity-50
             `}
           />
           <ul
             tabIndex={0}
             className={`
-                dropdown-content z-[1] menu menu-horizontal
+                dropdown-content z-[100] menu menu-horizontal
                 flex bg-base-300 rounded-box shadow
               `}
           >
