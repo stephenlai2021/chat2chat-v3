@@ -86,7 +86,12 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
           </div>
         </div>
 
-        <div className={`chat-header flex ml-1`}>
+        <div 
+          className={`
+            chat-header flex ml-1
+            ${isMessageFromMe ? 'mr-2' : 'ml-2'}
+          `}
+        >
           <time className="text-xs opacity-50">
             {formatTimeClock(message.time)}
           </time>

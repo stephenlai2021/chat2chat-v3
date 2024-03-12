@@ -308,7 +308,7 @@ export default function ChatroomIdPage() {
 
       <div
         ref={messagesContainerRef}
-        className="shadow-inner flex-1 overflow-auto py-5 pl-6"
+        className="shadow-inner flex-1 overflow-auto py-5 px-3"
       >
         {!loading &&
           messages?.map((message) => (
