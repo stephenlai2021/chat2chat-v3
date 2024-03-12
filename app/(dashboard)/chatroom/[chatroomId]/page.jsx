@@ -112,7 +112,7 @@ export default function ChatroomIdPage() {
         content: message,
         chatRoomId: chatroomId,
         time: serverTimestamp(),
-        date: moment(serverTimestamp()).format("L"),
+        // date: moment(serverTimestamp()).format("L"),
       };
 
       /*
