@@ -22,12 +22,7 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
   const isMessageFromMe = message.sender === me.id;
 
   const [deleteMsgMenu, setDeleteMsgMenu] = useState(false);
-
-  const formatTimeAgo = (timestamp) => {
-    const date = timestamp?.toDate();
-    const momentDate = moment(date);
-    return momentDate.fromNow();
-  };
+  const [isEdited, setIsEdited] = useState(false);
 
   const formatTimeClock = (timestamp) => {
     const date = timestamp?.toDate();
@@ -35,19 +30,38 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
     return momentDate.format("LT");
   };
 
+  const getCurrentDate = () => {
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const currentDate = `${month}/${day}/${year}`;
+    return currentDate;
+  };
+
+  const getYesterday = () => {
+    const date = new Date();
+    const day = date.getDate() - 1;
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const yesterday = `${month}/${day}/${year}`;
+    return yesterday;
+  };
+
   const formatDate = (timestamp) => {
     const date = timestamp?.toDate();
     const momentDate = moment(date);
-    return momentDate.format("L");
+    return momentDate.format("l");
   };
 
   return (
     <div>
-      {/* <div 
-        className={`
-          divider text-xs opacity-50 flex justify-cente
-        `}
-      >{formatDate(message.time)}
+      {/* <div className="divide flex justify-center text-xs opacity-50">
+        {formatDate(message?.time) == getCurrentDate()
+          ? "Today"
+          : formatDate(message?.time) == getYesterday()
+          ? "Yesterday"
+          : formatDate(message?.time)}
       </div> */}
       <div
         key={message.id}
@@ -85,8 +99,8 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
             `}
           >
             <time className="text-xs opacity-50">
-              {/* {formatTimeAgo(message.time)} */}
               {formatTimeClock(message.time)}
+              {/* {formatFullDate(message.time)} */}
             </time>
           </div>
           <div
@@ -102,7 +116,7 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
             <img src={message.image} className="max-h-60 mb- rounded" />
             <p
               className={`
-              text-wrap leading-tight min-w-[px] text-sm w-full
+              text-wrap leading-tight min-w-[px] text-sm w-full pr-4
               ${
                 isMessageFromMe ? "text-accent-content" : "text-primary-content"
               }
@@ -111,29 +125,16 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
             >
               {message.content}
             </p>
-
-            {/* Message Sent Time */}
-            {/* <div
-            className={`text-xs mt-1 min-w-[60px] flex ${
-              isMessageFromMe ? "text-accent-content" : "text-primary-content"
-            }`}
-          >
-            {formatTimeAgo(message.time)}
-          </div> */}
           </div>
           <div className="chat-footer opacity-50 ml-1 text-xs">Read</div>
 
-          {/* Delete Menu */}
+          {/* Option Icon */}
           <div className="dropdown dropdown-top dropdown-end">
             <CiMenuKebab
               tabIndex={0}
               role="button"
               className={`
-                  ${
-                    isMessageFromMe
-                      ? "left-[-20px]"
-                      : "hidden"
-                  } 
+                  ${isMessageFromMe ? "left-[-20px]" : "hidden"} 
                   absolute top-[-65px] w-5 h-5 hover:cursor-pointer text-warning opacity-50
                 `}
               onClick={() => setDeleteMsgMenu(!deleteMsgMenu)}
@@ -148,6 +149,11 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
               `}
             >
               <li>
+                <a className="toolti tooltip-lef" data-tip="Edit">
+                  <MdOutlineModeEditOutline className="w-5 h-5" />
+                </a>
+              </li>
+              <li>
                 <a className="toolti tooltip-lef" data-tip="Delete">
                   <MdOutlineDeleteOutline
                     className="w-5 h-5"
@@ -155,12 +161,7 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
                   />
                 </a>
               </li>
-              <li>
-                <a className="toolti tooltip-lef" data-tip="Edit">
-                  <MdOutlineModeEditOutline className="w-5 h-5" />
-                </a>
-              </li>
-            </ul>           
+            </ul>
           </div>
         </div>
       </div>

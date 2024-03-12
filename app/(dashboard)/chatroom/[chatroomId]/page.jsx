@@ -74,19 +74,29 @@ export default function ChatroomIdPage() {
     }
   };
 
-  const formatDate = (timestamp) => {
-    // const date = timestamp.toDate();
-    // const momentDate = moment(date);
-    // const date = timestamp.toDate();
-    const momentDate = moment(timestamp);
-    return momentDate.format("L");
+  const getCurrentDate = () => {
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const currentDate = `${month}/${day}/${year}`;
+    return currentDate;
   };
 
-  const formatTimeClock = (timestamp) => {
-    // const date = timestamp.toDate();
-    // const momentDate = moment(date);
-    const momentDate = moment(timestamp);
-    return momentDate.format("LT");
+  const getYesterday = () => {
+    const date = new Date();
+    const day = date.getDate() - 1;
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const yesterday = `${month}/${day}/${year}`;
+    return yesterday;
+  };
+
+  // Format: 03/12/2024
+  const formatDate = (timestamp) => {
+    const date = timestamp.toDate();
+    const momentDate = moment(date);
+    return momentDate.format("l");
   };
 
   /* 
@@ -97,11 +107,12 @@ export default function ChatroomIdPage() {
     if (message == "" && image == null) return;
     try {
       let newMessage = {
-        chatRoomId: chatroomId,
+        image,
         sender: me.id,
         content: message,
+        chatRoomId: chatroomId,
         time: serverTimestamp(),
-        image,
+        date: moment(serverTimestamp()).format("L"),
       };
 
       /*
@@ -115,8 +126,11 @@ export default function ChatroomIdPage() {
       const messagesCollection = collection(firestore, "messages");
       await addDoc(messagesCollection, newMessage);
 
-      const c = collection(firestore, "messages", moment(serverTimestamp()).format("YYYY"), moment(serverTimestamp()).format("MMM Do"))
-      await addDoc(c, newMessage);
+      // const c = collection(firestore, "messages", moment(serverTimestamp()).format("YYYY"), moment(serverTimestamp()).format("MMM Do"))
+      // await addDoc(c, newMessage);
+
+      // const c = doc(firestore, "messages", moment(serverTimestamp()).format("L").replace(/[/]/g, ''))
+      // await setDoc(c, newMessage);
 
       /* update last message in chatrooms collection */
       const chatroomRef = doc(firestore, "chatrooms", chatroomId);
@@ -170,11 +184,6 @@ export default function ChatroomIdPage() {
 
     // setLoading(true);
     const unsubMsgs = onSnapshot(
-      // query(
-      //   collection(firestore, "messages", moment(serverTimestamp()).format("YYYY"), moment(serverTimestamp()).format("MMM Do")),
-      //   where("chatRoomId", "==", chatroomId),
-      //   orderBy("time", "asc")
-      // ),
       query(
         collection(firestore, "messages"),
         where("chatRoomId", "==", chatroomId),
@@ -295,17 +304,26 @@ export default function ChatroomIdPage() {
       >
         {!loading &&
           messages?.map((message) => (
-            // <div>
-            //   <div className="divider text-xs opacity-50">{formatDate(message.time)}</div>
-            <MessageCard
-              me={me}
-              key={message.id}
-              other={other}
-              others={others}
-              message={message}
-              deleteMsg={deleteMsg}
-            />
-            // </div>
+            <div key={message.id}>
+              <div className="divide flex justify-center text-xs opacity-50">
+                {
+                  formatDate(message?.time) == getCurrentDate()
+                    ? "Today"
+                    : formatDate(message?.time) == getYesterday()
+                    ? "Yesterday"
+                    // : formatDate(message?.time)
+                    : moment(message?.time.toDate()).format("MMM Do")
+                }
+              </div>
+              <MessageCard
+                me={me}
+                key={message.id}
+                other={other}
+                others={others}
+                message={message}
+                deleteMsg={deleteMsg}
+              />
+            </div>
           ))}
 
         {loading && <MessageSkeleton />}
