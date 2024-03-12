@@ -24,12 +24,6 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
   const [deleteMsgMenu, setDeleteMsgMenu] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
 
-  const formatTimeClock = (timestamp) => {
-    const date = timestamp?.toDate();
-    const momentDate = moment(date);
-    return momentDate.format("LT");
-  };
-
   const getCurrentDate = () => {
     const date = new Date();
     const day = date.getDate();
@@ -48,21 +42,32 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
     return yesterday;
   };
 
+  // Format: 03/12/2024
   const formatDate = (timestamp) => {
     const date = timestamp?.toDate();
     const momentDate = moment(date);
     return momentDate.format("l");
   };
 
+  // 2:21PM
+  const formatTimeClock = (timestamp) => {
+    const date = timestamp?.toDate();
+    const momentDate = moment(date);
+    return momentDate.format("LT");
+  };
+
   return (
     <div>
-      {/* <div className="divide flex justify-center text-xs opacity-50">
-        {formatDate(message?.time) == getCurrentDate()
+      <div className="divide flex justify-center text-xs opacity-50">
+        {formatDate(message.time) == getCurrentDate()
           ? "Today"
-          : formatDate(message?.time) == getYesterday()
+          : formatDate(message.time) == getYesterday()
           ? "Yesterday"
-          : formatDate(message?.time)}
-      </div> */}
+          : formatDate(message.time).substring(
+              0,
+              formatDate(message.time).length - 5
+            )}
+      </div>
       <div
         key={message.id}
         className={`
@@ -100,7 +105,6 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
           >
             <time className="text-xs opacity-50">
               {formatTimeClock(message.time)}
-              {/* {formatFullDate(message.time)} */}
             </time>
           </div>
           <div

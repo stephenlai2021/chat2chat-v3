@@ -305,16 +305,16 @@ export default function ChatroomIdPage() {
         {!loading &&
           messages?.map((message) => (
             <div key={message.id}>
-              <div className="divide flex justify-center text-xs opacity-50">
+              {/* <div className="divide flex justify-center text-xs opacity-50">
                 {
-                  formatDate(message?.time) == getCurrentDate()
+                  formatDate(message.time) == getCurrentDate()
                     ? "Today"
-                    : formatDate(message?.time) == getYesterday()
+                    : formatDate(message.time) == getYesterday()
                     ? "Yesterday"
-                    : formatDate(message?.time).substring(0, formatDate(message?.time).length - 5)
-                    // : moment(message?.time.toDate()).format("MMM Do")
-                }
-              </div>
+                    : formatDate(message.time).substring(0, formatDate(message.time).length - 5)
+                  }
+              </div> */}
+              {/* : moment(message?.time.toDate()).format("MMM Do") */}
               <MessageCard
                 me={me}
                 key={message.id}
