@@ -66,7 +66,9 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
           : formatDate(message.time).substring(
               0,
               formatDate(message.time).length - 5
-            )}
+              )
+          // : moment(message?.time.toDate()).format("MMM Do")
+        }
       </div>
       <div
         key={message.id}
