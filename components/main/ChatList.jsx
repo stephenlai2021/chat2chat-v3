@@ -450,12 +450,8 @@ export default function ChatList() {
         </div>
 
         {/* Body */}
-        {/* ${size.width <= 800 ? "mb-[56px]" : ""} */}
         <div
-          className={`
-          overflow-y-auto shadow-inner
-        `}
-        >
+          className={`overflow-y-auto shadow-inner`}>
           {/* search input */}
           <div
             className={`relative flex justify-center mx-3

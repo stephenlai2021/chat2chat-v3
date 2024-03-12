@@ -12,6 +12,7 @@ import {
   query,
   where,
   addDoc,
+  setDoc,
   getDoc,
   orderBy,
   updateDoc,
@@ -32,6 +33,9 @@ import { FaArrowLeft, FaBullseye } from "react-icons/fa";
 
 /* zustand */
 import { useStore } from "@/zustand/store";
+
+/* utils */
+import moment from "moment";
 
 // export default function ChatroomIdPage({ params: { chatroomId } }) {
 export default function ChatroomIdPage() {
@@ -70,6 +74,21 @@ export default function ChatroomIdPage() {
     }
   };
 
+  const formatDate = (timestamp) => {
+    // const date = timestamp.toDate();
+    // const momentDate = moment(date);
+    // const date = timestamp.toDate();
+    const momentDate = moment(timestamp);
+    return momentDate.format("L");
+  };
+
+  const formatTimeClock = (timestamp) => {
+    // const date = timestamp.toDate();
+    // const momentDate = moment(date);
+    const momentDate = moment(timestamp);
+    return momentDate.format("LT");
+  };
+
   /* 
     put messages in db 
     This function triggers realtime snapshot (messages && chatrooms) twice !!!
@@ -95,6 +114,9 @@ export default function ChatroomIdPage() {
       // add new message in messages collection
       const messagesCollection = collection(firestore, "messages");
       await addDoc(messagesCollection, newMessage);
+
+      const c = collection(firestore, "messages", moment(serverTimestamp()).format("YYYY"), moment(serverTimestamp()).format("MMM Do"))
+      await addDoc(c, newMessage);
 
       /* update last message in chatrooms collection */
       const chatroomRef = doc(firestore, "chatrooms", chatroomId);
@@ -148,6 +170,11 @@ export default function ChatroomIdPage() {
 
     // setLoading(true);
     const unsubMsgs = onSnapshot(
+      // query(
+      //   collection(firestore, "messages", moment(serverTimestamp()).format("YYYY"), moment(serverTimestamp()).format("MMM Do")),
+      //   where("chatRoomId", "==", chatroomId),
+      //   orderBy("time", "asc")
+      // ),
       query(
         collection(firestore, "messages"),
         where("chatRoomId", "==", chatroomId),
@@ -166,7 +193,7 @@ export default function ChatroomIdPage() {
       }
     );
     return () => unsubMsgs();
-  // }, [chatroomId]);
+    // }, [chatroomId]);
   }, []);
 
   /* 
@@ -228,36 +255,37 @@ export default function ChatroomIdPage() {
           </div>
         ) : (
           <>
-        <div
-          className={`
+            <div
+              className={`
             ml-4 pr-1 pt-3 hover:cursor-pointer
             ${size.width <= 800 ? "flex" : "hidden"} 
           `}
-          onClick={toggleMobile}
-        >
-          <FaArrowLeft className="text-base-content w-[18px] h-[18px]" />
-        </div>
+              onClick={toggleMobile}
+            >
+              <FaArrowLeft className="text-base-content w-[18px] h-[18px]" />
+            </div>
 
-        <div className={`
-          ${size.width > 800 ? 'ml-4' : 'm-1'}
+            <div
+              className={`
+          ${size.width > 800 ? "ml-4" : "m-1"}
           border-base-content avatar
-        `}>
-          <div
-            className="w-9 h-9 rounded-full hover:cursor-pointer"
-            onClick={toggleMobile}
-          >
-            {other?.avatarUrl ? (
-              <img src={other?.avatarUrl} />
-            ) : (
-              <img src="/avatar.png" />
-            )}
-          </div>
-        </div>
-        <div className="h-8 font-semibold flex items-end ml-2 text-base-content">
-          {other?.name}
-        </div>
-
-        </>
+        `}
+            >
+              <div
+                className="w-9 h-9 rounded-full hover:cursor-pointer"
+                onClick={toggleMobile}
+              >
+                {other?.avatarUrl ? (
+                  <img src={other?.avatarUrl} />
+                ) : (
+                  <img src="/avatar.png" />
+                )}
+              </div>
+            </div>
+            <div className="h-8 font-semibold flex items-end ml-2 text-base-content">
+              {other?.name}
+            </div>
+          </>
         )}
       </div>
 
@@ -265,9 +293,10 @@ export default function ChatroomIdPage() {
         ref={messagesContainerRef}
         className="shadow-inner flex-1 overflow-auto py-5 pl-6"
       >
-        {/* {messages?.map((message) => ( */}
         {!loading &&
           messages?.map((message) => (
+            // <div>
+            //   <div className="divider text-xs opacity-50">{formatDate(message.time)}</div>
             <MessageCard
               me={me}
               key={message.id}
@@ -276,6 +305,7 @@ export default function ChatroomIdPage() {
               message={message}
               deleteMsg={deleteMsg}
             />
+            // </div>
           ))}
 
         {loading && <MessageSkeleton />}
