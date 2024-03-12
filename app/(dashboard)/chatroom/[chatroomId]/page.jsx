@@ -311,8 +311,8 @@ export default function ChatroomIdPage() {
                     ? "Today"
                     : formatDate(message?.time) == getYesterday()
                     ? "Yesterday"
-                    // : formatDate(message?.time)
-                    : moment(message?.time.toDate()).format("MMM Do")
+                    : formatDate(message?.time).substring(0, formatDate(message?.time).length - 5)
+                    // : moment(message?.time.toDate()).format("MMM Do")
                 }
               </div>
               <MessageCard
