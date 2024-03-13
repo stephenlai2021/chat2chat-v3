@@ -305,7 +305,7 @@ export default function ChatroomIdPage() {
         {!loading &&
           messages?.map((message) => (
             <div key={message.id}>
-              <div className="divide flex justify-center text-[10px] opacity-50">
+              <div className="divide my-3 flex justify-center text-[10px] opacity-50">
                 {
                   formatDate(message.time) == getCurrentDate()
                     ? "Today"
