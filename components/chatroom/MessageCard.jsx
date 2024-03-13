@@ -56,7 +56,7 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
 
   return (
     <>
-      <div className="divide flex justify-center my-2 text-xs opacity-50 overflow-x-hidde">
+      {/* <div className="divide text-[10px] flex justify-center my-2 opacity-50 overflow-x-hidde">
         {formatDate(message.time) == getCurrentDate()
           ? "Today"
           : formatDate(message.time) == getYesterday()
@@ -65,7 +65,7 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
               0,
               formatDate(message.time).length - 5
             )}
-      </div>
+      </div> */}
       {/* : moment(message?.time.toDate()).format("MMM Do") */}
 
       <div
@@ -92,7 +92,7 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
             ${isMessageFromMe ? 'mr-2' : 'ml-2'}
           `}
         >
-          <time className="text-xs opacity-50">
+          <time className="opacity-50 text-[10px]">
             {formatTimeClock(message.time)}
           </time>
         </div>
@@ -123,7 +123,7 @@ function MessageCard({ message, me, other, others, deleteMsg }) {
             {message.content}
           </p>
         </div>
-        <div className="chat-footer opacity-50 ml-1 text-xs">Read</div>
+        <div className="chat-footer opacity-50 ml-1 text-[10px]">Read</div>
 
         {/* Option Icon */}
         <div className="dropdown dropdown-left dropdown-end">

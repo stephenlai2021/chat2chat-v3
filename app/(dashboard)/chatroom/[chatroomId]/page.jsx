@@ -64,11 +64,11 @@ export default function ChatroomIdPage() {
       await deleteDoc(doc(firestore, "messages", id));
 
       /* updateDoc triggers snapshot twice which is a bug !!! */
-      const chatroomRef = doc(firestore, "chatrooms", chatroomId);
-      await updateDoc(chatroomRef, {
-        lastMessage: `message removed`,
-        lastMessageSentTime: serverTimestamp(),
-      });
+      // const chatroomRef = doc(firestore, "chatrooms", chatroomId);
+      // await updateDoc(chatroomRef, {
+      //   lastMessage: `message removed`,
+      //   lastMessageSentTime: serverTimestamp(),
+      // });
     } catch (err) {
       console.log("error: ", err);
     }
@@ -98,14 +98,6 @@ export default function ChatroomIdPage() {
     const momentDate = moment(date);
     return momentDate.format("l");
   };
-
-  // 2:21PM
-  const formatTimeClock = (timestamp) => {
-    const date = timestamp?.toDate();
-    const momentDate = moment(date);
-    return momentDate.format("LT");
-  };
-
 
   /* 
     put messages in db 
@@ -284,9 +276,9 @@ export default function ChatroomIdPage() {
 
             <div
               className={`
-          ${size.width > 800 ? "ml-4" : "m-1"}
-          border-base-content avatar
-        `}
+                ${size.width > 800 ? "ml-4" : "m-1"}
+                border-base-content avatar
+              `}
             >
               <div
                 className="w-9 h-9 rounded-full hover:cursor-pointer"
@@ -313,7 +305,7 @@ export default function ChatroomIdPage() {
         {!loading &&
           messages?.map((message) => (
             <div key={message.id}>
-              {/* <div className="divide flex justify-center text-xs opacity-50">
+              <div className="divide flex justify-center text-[10px] opacity-50">
                 {
                   formatDate(message.time) == getCurrentDate()
                     ? "Today"
@@ -321,7 +313,7 @@ export default function ChatroomIdPage() {
                     ? "Yesterday"
                     : formatDate(message.time).substring(0, formatDate(message.time).length - 5)
                   }
-              </div> */}
+              </div>
               {/* : moment(message?.time.toDate()).format("MMM Do") */}
               <MessageCard
                 me={me}
