@@ -36,7 +36,7 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 /* components */
 import ImagePreviewModal from "@/components/modal/ImagePreviewModal";
 
-function Main() {
+export default function Main() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -149,6 +149,7 @@ function Main() {
     setLoading(true);
 
     if (validateForm()) {
+      // Signup User with Supabase
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -165,16 +166,37 @@ function Main() {
 
       if (data?.user === null) return;
 
+      /* Save User Data to Firestore */
       const docRef = doc(firestore, "users", email);
       await setDoc(docRef, {
         id: data?.user?.id,
         name,
         email,
-        avatarUrl,
-        newMessage
+        avatarUrl
       });
       console.log("user data created !");
       setConfirm(true);
+    }
+  };
+
+  /* Register User with NextAuth + Mongodb */
+  const handleSubmit = async (evt) => {
+    evt.preventDefault();
+    setLoading(true);
+
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, password, avatarUrl }),
+    });
+    if (res.ok) {
+      router.push('/login')
+    }
+    if (res.error) {
+      toast.error("Something went wrong")
+      setLoading(false);
     }
   };
 
@@ -190,7 +212,8 @@ function Main() {
   return (
     <div className="flex justify-center items-center w-screen h-screen font-primary px-8">
       <form
-        onSubmit={handleRegister}
+        onSubmit={handleSubmit}
+        // onSubmit={handleRegister}
         className="space-y-4 w-full h-full max-w-[600px] pt-10 pl-10 pr-10 form-padding"
       >
         {/* Title */}
@@ -288,11 +311,14 @@ function Main() {
             "Sign Up"
           )}
         </button>
-        
+
         {/* Login link  */}
         <span className="text-base-content text-sm">
           Already have an account?{" "}
-          <Link href="/login" className="text-base-content text-sm hover:underline">
+          <Link
+            href="/login"
+            className="text-base-content text-sm hover:underline"
+          >
             Login
           </Link>
         </span>
@@ -300,16 +326,14 @@ function Main() {
 
       <ImagePreviewModal
         id="imagePreviewModal"
-        closeAndClearModal={closeAndClearModal}
+        inputFile={inputFile}
         imagePreview={imagePreview}
         showUploadBtn={showUploadBtn}
+        uploadProgress={uploadProgress}
         handleUpload={handleUpload}
         handleFileChange={handleFileChange}
-        uploadProgress={uploadProgress}
-        inputFile={inputFile}
+        closeAndClearModal={closeAndClearModal}
       />
     </div>
   );
 }
-
-export default Main;

@@ -19,8 +19,11 @@ import {
 } from "firebase/firestore";
 
 /* next */
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+/* next-auth */
+import { signIn } from "next-auth/react";
 
 /* supabase */
 import useSupabaseClient from "@/lib/supabase/client";
@@ -101,6 +104,7 @@ export default function LoginPage() {
       if (data?.user === null) return;
 
       /* 
+        Donot delete this block !!!
         set user status is optional, because it cost too much ! 
       */
       // const user = data?.user;
@@ -110,6 +114,23 @@ export default function LoginPage() {
     }
   };
 
+  const handleSubmit = async (evt) => {
+    evt.preventDefault();
+    setLoading(true);
+
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+    if (res.ok) router.push("/");
+    if (res.error) {
+      toast.error("Invalid email or password");
+      setLoading(false);
+    } 
+      
+  };
+
   return (
     <div
       className={`
@@ -117,7 +138,8 @@ export default function LoginPage() {
     `}
     >
       <form
-        onSubmit={handleLogin}
+        // onSubmit={handleLogin}
+        onSubmit={handleSubmit}
         className="space-y-4 w-full max-w-[600px] pt-10 pl-10 pr-10 form-padding"
       >
         {/* Title */}
@@ -175,7 +197,10 @@ export default function LoginPage() {
         {/* Register link  */}
         <span className="text-base-content text-sm">
           Don't have an account?{" "}
-          <Link href="/register" className="text-base-content text-sm hover:underline">
+          <Link
+            href="/register"
+            className="text-base-content text-sm hover:underline"
+          >
             Register
           </Link>
         </span>

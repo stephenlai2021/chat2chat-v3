@@ -32,14 +32,15 @@ import useSupabaseClient from "@/lib/supabase/client";
 import { languages } from "@/data/utils";
 
 /* components */
-import UsersCard from "./UsersCard";
 import Sidebar from "./Sidebar";
-import BottomNavbar from "./BottomNavbar";
-import UsersCardSkeleton from "../skeleton/UsersCardSkeleton";
-import AddFriendModal from "../modal/AddFriendModal";
-import CreateGroupModal from "../modal/CreateGroupModal";
+import UsersCard from "./UsersCard";
 import BrandTitle from "./BrandTitle";
+import BottomNavbar from "./BottomNavbar";
+import AddFriendModal from "../modal/AddFriendModal";
 import ThemeSwitcher from "../switcher/ThemeSwitcher";
+import EditProfileModal from "../modal/EditProfileModal";
+import CreateGroupModal from "../modal/CreateGroupModal";
+import UsersCardSkeleton from "../skeleton/UsersCardSkeleton";
 
 /* react-icons */
 import { RxAvatar } from "react-icons/rx";
@@ -52,8 +53,14 @@ import { IoSettingsOutline } from "react-icons/io5";
 /* zustand */
 import { useStore } from "@/zustand/store";
 
+/* mongodb-model */
+import User from "@/models/User";
+
 /* hooks */
 import useWindowSize from "@/hooks/useWindowSize";
+
+/* next-auth */
+import { useSession } from "next-auth/react";
 
 // export default function ChatList({ userData }) {
 export default function ChatList() {
@@ -83,44 +90,12 @@ export default function ChatList() {
     setUserDataStore,
   } = useStore();
 
-  const handleTabClick = (tab) => setActiveTab(tab);
-
-  const getUserData = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    const userCred = session?.user;
-    const docRef = doc(firestore, "users", userCred.email);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      setUserData(docSnap.data());
-      setUserDataStore(docSnap.data());
-    }
-  };
-
-  useEffect(() => {
-    getUserData();
-  }, []);
-
-  // useEffect(() => {
-  //   console.log('userData | ChatList: ', userData)
-  // }, [userData])
-
-  /* 
-    Get Users (Do not delete !!!)
+  /*
+    Can't put the following codes inside of a function or useEffect hook !!!
   */
-  // useEffect(() => {
-  //   const usersRef = collection(firestore, "users");
-  //   const unsubUsers = onSnapshot(usersRef, (snapshot) => {
-  //     const users = [];
-  //     snapshot.forEach((doc) => users.push(doc.data()));
-  //     setUsers(users);
-  //     console.log("get users | chat list: ", users);
-  //   });
-  //   return () => unsubUsers();
-  // }, []);
+  const { data: session } = useSession();
+  const currentUser = session?.user;
+  // console.log("currentUser: ", currentUser);
 
   /* 
     Get Chatrooms
@@ -148,98 +123,6 @@ export default function ChatList() {
     });
     return () => unsubChatrooms();
   }, [userData]);
-
-  /* 
-    Do not delete this function !!!
-    This function reads through chatrooms collection, 
-    finding out documents containing login user data, 
-    then set status 'offline'  
-    if you have 100 chat lists it will read 50 times and
-    get realtime db 50 times which cost too much, so there
-    is no need to add online/offline status in chat app
-  */
-  // const setUserStatusOffline = async () => {
-  //   const loginUserRef = doc(firestore, "users", userData.email);
-  //   await updateDoc(loginUserRef, { status: "offline" });
-
-  //   const chatroomsQuery = query(
-  //     collection(firestore, "chatrooms"),
-  //     where("users", "array-contains", userData.id)
-  //   );
-  //   const querySnapshot = await getDocs(chatroomsQuery);
-  //   querySnapshot.forEach(async (document) => {
-  //     console.log(document.id, document.data());
-  //     await updateDoc(doc(firestore, "chatrooms", document.id), {
-  //       [`usersData.${userData.id}.status`]: "offline",
-  //     });
-  //   });
-  // };
-
-  // const createChat = async (user, foundUsersLength) => {
-  //   if (user.email === userData.email) {
-  //     toast(`You cannot add yourself !`, { icon: "😅" });
-  //     return;
-  //   }
-  //   setCreateChatLoading(true);
-
-  //   // 檢查聊天室是否存在
-  //   const existingChatroomsQuery = query(
-  //     collection(firestore, "chatrooms"),
-  //     where("users", "in", [
-  //       [userData.id, user.id],
-  //       [user.id, userData.id],
-  //     ])
-  //   );
-
-  //   try {
-  //     const existingChatroomsSnapshot = await getDocs(existingChatroomsQuery);
-
-  //     if (existingChatroomsSnapshot.docs.length > 0) {
-  //       if (foundUsersLength > 1) {
-  //         console.log(
-  //           `${user.name} with email: ${user.email} is already in your chat list`
-  //         );
-  //         toast(
-  //           `${user.name} with email: ${user.email} is already in your chat list`,
-  //           { icon: "😎" }
-  //         );
-  //       } else {
-  //         console.log(`chatroom for ${user.name} is already existed`);
-  //         toast(`${user.name} is already in your chat list`, { icon: "😎" });
-  //       }
-
-  //       setCreateChatLoading(false);
-  //       return;
-  //     }
-
-  //     const usersData = {
-  //       [userData.id]: userData,
-  //       [user.id]: user,
-  //     };
-
-  //     const chatroomData = {
-  //       users: [userData.id, user.id],
-  //       usersData,
-  //       timestamp: serverTimestamp(),
-  //       lastMessage: null,
-  //       lastMessageSentTime: null,
-
-  //       // 以下是是新加的 field, 要注意既有的 chatrooms 都沒有, 所以讀取時會報錯 !!!
-  //       newMessage: false,
-  //       lastImage: null,
-  //     };
-
-  //     await addDoc(collection(firestore, "chatrooms"), chatroomData);
-  //     setActiveTab("privateChat");
-  //     setCreateChatLoading(false);
-  //     // setFoundUser({ isClick: false, ...user });
-  //     setUserInfo("");
-  //     setFoundUsers("");
-  //     document.getElementById("add-friend-modal").close();
-  //   } catch (error) {
-  //     console.error("Error creating or checking chatroom:", error);
-  //   }
-  // };
 
   const openChat = async (chatroom) => {
     setSelectedChatroom(null);
@@ -310,7 +193,7 @@ export default function ChatList() {
       `}
     >
       <Sidebar
-        userData={userData}
+        userData={currentUser}
         logoutClick={logoutClick}
         logoutLoading={logoutLoading}
       />
@@ -401,9 +284,9 @@ export default function ChatList() {
                 ></label>
                 <ul className="pt-4 w-80 min-h-full bg-base-200 text-base-content">
                   <UsersCard
-                    name={userData?.name}
-                    email={userData?.email}
-                    avatarUrl={userData?.avatarUrl}
+                    name={currentUser?.name}
+                    email={currentUser?.email}
+                    avatarUrl={currentUser?.avatarUrl}
                     found={false}
                   />
                   <div className="divider" />
@@ -427,20 +310,20 @@ export default function ChatList() {
                           </ul>
                         </details>
                       </li>
-                      {size.width <= 800 && (
-                        <>
-                          <div className="divider" />
-                          <li>
-                            <div onClick={logoutClick}>
-                              {logoutLoading ? (
-                                <div className="loading loading-spinner loading-xs opacity-30 text-base-content flex justify-center ml-2" />
-                              ) : (
-                                "Logout"
-                              )}
-                            </div>
-                          </li>
-                        </>
-                      )}
+                      {/* {size.width <= 800 && (
+                        <> */}
+                      <div className="divider" />
+                      <li>
+                        <div onClick={logoutClick}>
+                          {logoutLoading ? (
+                            <div className="loading loading-spinner loading-xs opacity-30 text-base-content flex justify-center ml-2" />
+                          ) : (
+                            "Logout"
+                          )}
+                        </div>
+                      </li>
+                      {/* </>
+                      )} */}
                     </ul>
                   </li>
                 </ul>
@@ -450,8 +333,7 @@ export default function ChatList() {
         </div>
 
         {/* Body */}
-        <div
-          className={`overflow-y-auto shadow-inner`}>
+        <div className={`overflow-y-auto shadow-inner`}>
           {/* search input */}
           <div
             className={`relative flex justify-center mx-3
@@ -562,9 +444,10 @@ export default function ChatList() {
         />
       </main>
 
+      <CreateGroupModal id="createGroupModal" />
+      <EditProfileModal id="editProfileModal" userData={currentUser} />
       <AddFriendModal id="addFriendModalChatList" userData={userData} />
 
-      <CreateGroupModal id="createGroupModal" />
     </div>
   );
 }

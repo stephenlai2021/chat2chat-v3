@@ -1,13 +1,12 @@
-# Chat2Chat V3
+# Chat2Chat V4
 
 ## Tech Stack
 
-- Nextjs 14
-- Supabase Auth
-- Firebase 
-  - Firestore
-  - Storage
-- Tailwindcss
+- Nextjs 14 as framework
+- NextAuth as Authentication
+- Mongodb Atlas as Database
+- Firebase Storage as Image file Storage
+- Tailwindcss && DaisyUI as Styling
 
 ## Feacures
 

@@ -2,8 +2,9 @@
 
 /* components */
 import UsersCard from "./UsersCard";
-import ThemeSwitcher from "../switcher/ThemeSwitcher";
 import AddFriendModal from "../modal/AddFriendModal";
+import ThemeSwitcher from "../switcher/ThemeSwitcher";
+import EditProfileModal from "../modal/EditProfileModal";
 
 /* next */
 import { useRouter } from "next/navigation";
@@ -24,13 +25,7 @@ import { AiOutlineUsergroupAdd } from "react-icons/ai";
 /* zustand */
 import { useStore } from "@/zustand/store";
 
-export default function Sidabar({
-  userData,
-  activeTab,
-  handleTabClick,
-  logoutClick,
-  logoutLoading,
-}) {
+export default function Sidabar({ userData }) {
   const router = useRouter();
   const {
     setSelectedChatroom,
@@ -39,17 +34,6 @@ export default function Sidabar({
     userDataStore,
     setUserDataStore,
   } = useStore();
-
-
-  const handleAddFriend = () => {
-    router.push("/addfriend");
-    toggleMobile();
-  };
-
-  const handleCreateGroup = () => {
-    router.push("/creategroup");
-    toggleMobile();
-  };
 
   return (
     <div className="bg-base-30 w-[64px] shadow-inner h-full flex flex-col items-center sidebar-hide pt-3">
@@ -79,11 +63,7 @@ export default function Sidabar({
           onClick={() => handleTabClick("groupChat")}
         />
       </div> */}
-
-      {/* add icon */}
-      {/* ${
-        activeTab == "add" ? "menu-left-active border-base-content" : ""
-      }  */}
+    
       <div
         className={`
           w-full mt-2 py- px-5 flex items-center justify-center
@@ -113,7 +93,7 @@ export default function Sidabar({
       </div>
 
       {/* Logout icon */}
-      <div className="mt-auto mb-4 tooltip tooltip-top" data-tip="Logout">
+      {/* <div className="mt-auto mb-4 tooltip tooltip-top" data-tip="Logout">
         <div  
           className={`
             loading loading-spinner loading-xs text-base-content flex justify-center ml-2 opacity-30
@@ -127,6 +107,29 @@ export default function Sidabar({
           `}
           onClick={logoutClick}
         />
+      </div> */}
+
+      {/* User Avatar */}
+      <div className="mt-auto mb-4 tooltip tooltip-top" data-tip="Edit profile">
+        <div className="w-6 h-6 hover:cursor-pointer">
+          {userData?.avatarUrl ? (
+            <img
+              src={userData?.avatarUrl}
+              className={`w-full h-full rounded-full`}
+              onClick={() =>
+                document.getElementById("editProfileModal").showModal()
+              }
+            />
+          ) : (
+            <img
+              src="/avatar.png"
+              className={`w-full h-full rounded-full`}
+              onClick={() =>
+                document.getElementById("editProfileModal").showModal()
+              }
+            />
+          )}
+        </div>
       </div>
 
       {/* Avatar Icon */}
@@ -212,10 +215,8 @@ export default function Sidabar({
         </form>
       </dialog> */}
 
-      <AddFriendModal
-        id="addFriendModal"
-        userData={userData}
-      />
+      <EditProfileModal id="editProfileModal" />
+      <AddFriendModal id="addFriendModal" userData={userData} />
     </div>
   );
 }

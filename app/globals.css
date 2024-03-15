@@ -108,7 +108,7 @@
 }
 
 @media (max-width: 800px) {
-  .chatlist-gone {
+  .chatlist-mobile {
     display: none;
   }
   .navbar-avatar-margin {

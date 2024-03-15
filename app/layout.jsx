@@ -16,6 +16,7 @@ import DaisyUIThemeProvider from "@/providers/daisyui-theme-provider";
 
 /* components */
 import ChatList from "@/components/main/ChatList";
+import NextAuthProvider from "@/components/providers/NextAuthProvider";
 
 /* next */
 import { usePathname } from "next/navigation";
@@ -56,12 +57,14 @@ export default function RootLayout({ children }) {
     return (
       <html lang="en">
         <body className={`${inter.className}`} suppressHydrationWarning>
-          <DaisyUIThemeProvider>
-            <Toaster position="bottom-center" />
-            <div className="max-w-[1200px] mx-auto bg-base-200 flex">
-              {children}
-            </div>
-          </DaisyUIThemeProvider>
+          <NextAuthProvider>
+            <DaisyUIThemeProvider>
+              <Toaster position="bottom-center" />
+              <div className="max-w-[1200px] mx-auto bg-base-200 flex">
+                {children}
+              </div>
+            </DaisyUIThemeProvider>
+          </NextAuthProvider>
         </body>
       </html>
     );
@@ -69,16 +72,17 @@ export default function RootLayout({ children }) {
     return (
       <html lang="en">
         <body className={`${inter.className}`} suppressHydrationWarning>
-          <DaisyUIThemeProvider>
-            <Toaster position="bottom-center" />
-
-            <div className="max-w-[1200px] mx-auto bg-base-100 flex justify-center overflow-hidden">
-              <div className="w-[1100px] bg-base-200 flex overflow-hidde">
-                <ChatList />
-                {children}
+          <NextAuthProvider>
+            <DaisyUIThemeProvider>
+              <Toaster position="bottom-center" />
+              <div className="max-w-[1200px] mx-auto bg-base-100 flex justify-center overflow-hidden">
+                <div className="w-[1100px] bg-base-200 flex overflow-hidde">
+                  <ChatList />
+                  {children}
+                </div>
               </div>
-            </div>
-          </DaisyUIThemeProvider>
+            </DaisyUIThemeProvider>
+          </NextAuthProvider>
         </body>
       </html>
     );

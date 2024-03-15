@@ -55,8 +55,8 @@ export default function ChatroomIdPage() {
   const [others, setOthers] = useState([]);
 
   const [other, setOther] = useState(null);
-  const [otherUserData, setOtherUserData] = useState(null);
   const [msgCount, setMsgCount] = useState(0);
+  const [otherUserData, setOtherUserData] = useState(null);
   const [isMessageBottom, setIsMessageBottom] = useState(false);
 
   const deleteMsg = async (id) => {
@@ -73,6 +73,23 @@ export default function ChatroomIdPage() {
       console.log("error: ", err);
     }
   };
+
+  const getDay = () => {
+    const date = new Date();
+    const day = date.getDate().toString()
+    return day
+  }
+
+  const getMonth = () => {
+    const date = new Date();
+    const month = (date.getMonth() + 1).toString()
+    return month
+  }
+  const getYear = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    return year
+  }
 
   const getCurrentDate = () => {
     const date = new Date();
@@ -103,7 +120,7 @@ export default function ChatroomIdPage() {
     put messages in db 
     This function triggers realtime snapshot (messages && chatrooms) twice !!!
   */
-  const sendMessage = async () => {
+  const sendMessage = async (msg) => {
     if (message == "" && image == null) return;
     try {
       let newMessage = {
@@ -112,13 +129,15 @@ export default function ChatroomIdPage() {
         content: message,
         chatRoomId: chatroomId,
         time: serverTimestamp(),
-        // date: moment(serverTimestamp()).format("L"),
+        // date: moment(serverTimestamp()).format("l"),
+        date: getMonth() + '/' + getDay ()
       };
+      console.log('mmdd: ', getMonth() + '/' + getDay())
 
       /*
-          Clear the input field before sending the message
-          This is important to clear input field in here !!!
-        */
+        Clear the input field before sending the message
+        This is important to clear input field in here !!!
+      */
       setMessage("");
       setImage(null);
 

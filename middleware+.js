@@ -7,15 +7,19 @@ import { createServerClient } from "@supabase/ssr";
 /* next-intl */
 import createMiddleware from "next-intl/middleware";
 
+/* next-auth */
+import { getServerSession } from "next-auth/next"
+// import { authOptions } from "@/app/api/auth/[...nextauth]"
+
 /* supabase */
 import getUserSession from "@/lib/supabase/getUserSession";
 
 export default createMiddleware({
   // A list of all locales that are supported
-  locales: ['en', 'id'],
- 
+  locales: ["en", "id"],
+
   // Used when no locale matches
-  defaultLocale: 'en'
+  defaultLocale: "en",
 });
 
 export async function middleware(request) {
@@ -71,24 +75,21 @@ export async function middleware(request) {
     }
   );
 
-  /* protect routes when typing in address bar */
-  const { data } = await supabase.auth.getSession();
-  // const { 
-  //   data: { session },
-  // } = await getUserSession();
-	const url = new URL(request.url);
-	if (data.session) {
-	// if (session) {
-		if (url.pathname === "/login" || url.pathname === "/register") {
-			return NextResponse.redirect(new URL("/", request.url));
-		}
-		return response;
-	} else {
+  /* Protect routes with Supabase (when typing in address bar) */
+  const { data: { session } } = await supabase.auth.getSession();
+
+  const url = new URL(request.url);
+  if (session) {
+    if (url.pathname === "/login" || url.pathname === "/register") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+    return response;
+  } else {
     if (url.pathname === "/" || url.pathname.includes("/chatroom/")) {
-			return NextResponse.redirect(new URL("/login", request.url));
-		}
-		return response;
-	}
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+    return response;
+  }
 }
 
 export const config = {
